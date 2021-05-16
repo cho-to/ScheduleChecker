@@ -22,13 +22,12 @@ class SchedulerFrame extends JFrame {
     private UsersPane usersPane;
     private ButtonsPane buttonsPane;
     private CalendarPane calendarPane;
-
+    private CalendarController calendarController;
 	
 	SchedulerFrame() {
 		setupComp();
-		
+		setupControllers();
 		setTitle("Scheduler");
-//		setResizable(false);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
       	setSize(1000, 800);
 		setVisible(true);
@@ -51,7 +50,11 @@ class SchedulerFrame extends JFrame {
 		getContentPane().add(usersPane, BorderLayout.PAGE_START);
 		getContentPane().add(calendarPane, BorderLayout.CENTER);
 		getContentPane().add(temp, BorderLayout.EAST);
-
-
 	}
+	
+	private void setupControllers() {
+		calendarController = new CalendarController(calendarPane);
+		buttonsPane.setCalendarController(calendarController);
+	}
+	
 }

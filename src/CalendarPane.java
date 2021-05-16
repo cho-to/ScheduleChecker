@@ -5,9 +5,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class CalendarPane extends JPanel {
+	JLabel calendarLabel;
 	CalendarPane() {
-		JLabel temp = new JLabel("calendar");
-		add(temp);
+		calendarLabel = new JLabel("calendar");
+		add(calendarLabel);
 //		this.setPreferredSize(new Dimension(400,100));
 		setBackground(Color.green);
 	}

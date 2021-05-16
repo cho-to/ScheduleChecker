@@ -15,11 +15,14 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
     private JLabel label;
     private JButton okayButton;
     private JButton cancelButton;
-    private SchedulerFrame frame;
+    private CalendarController calendarController;
 
-    NewScheduleDialog(SchedulerFrame frame, String str) {
-        super(frame, str, true);
-        this.frame = frame;
+    NewScheduleDialog(CalendarController calendarController) {
+    	setComp();
+    	this.calendarController = calendarController;
+    }
+    
+    private void setComp() {
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
         add(panel1);
@@ -36,7 +39,8 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
         cancelButton.addActionListener(this);
         panel2.add(cancelButton);
         
-        setSize(500, 500);
+        System.out.println("dialog");
+        setBounds(100, 100, 500, 500);
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -44,13 +48,15 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
                 dispose(); //다이얼로그 제거
             }
         });
+        setVisible(true);
+
     }
     
     
 	@Override
 	public void actionPerformed(ActionEvent e) {
         if (e.getSource() == okayButton) {
-        	frame.didAddNewScheudle();
+        	calendarController.addNewScheudle();
         }else if (e.getSource() == cancelButton) {
         }
         dispose(); //다이얼로그 제거
