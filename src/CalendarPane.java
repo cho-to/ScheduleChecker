@@ -13,4 +13,5 @@ public class CalendarPane extends JPanel {
 		add(calendarLabel);
 		setBackground(Color.green);
 	}
+
 }

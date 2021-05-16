@@ -8,6 +8,5 @@ public class TodoPane extends JPanel {
 		JLabel temp = new JLabel("TodoPane");
 		add(temp);
 		setBackground(Color.red);
-
 	}
 }
