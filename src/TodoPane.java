@@ -23,8 +23,8 @@ public class TodoPane extends JPanel {
 		for (int i =0; i<5; i++) {
 			todoButton[i] = new JButton();
 			add(todoButton[i]);
-			todoButton[i].setOpaque(true);//배경색 불투명하게->굳이?
-			todoButton[i].setBackground(new Color(0,42,126));//굳이 배경색 
+			todoButton[i].setOpaque(true);
+			todoButton[i].setBackground(new Color(0,42,126));
 			todoButton[i].setBorderPainted(false);
 			todoButton[i].setFocusPainted(false);
 			

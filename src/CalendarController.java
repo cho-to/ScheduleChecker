@@ -12,18 +12,17 @@ import com.google.gson.stream.JsonReader;
 public class CalendarController {
 	private CalendarPane calendarPane;
 	private Gson gson = new Gson();
-	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();//타입설정 Student객체만 사용가능
+	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();//���엯�꽕�젙 Student媛앹껜留� �궗�슜媛��뒫
 
 	CalendarController(CalendarPane calendarPane){
 		this.calendarPane = calendarPane;
 		readFiles();
-		System.out.println(schedules.size()); //저장되어있는 일정 갯수 (확인용)
+		System.out.println(schedules.size()); //���옣�릺�뼱�엳�뒗 �씪�젙 媛��닔 (�솗�씤�슜)
 		
 	}
 	
-	
-	// 프로그램을 처음킬때 폴더내에 있는 json파일을 모두 읽어와서
-	// 파싱해서 Schedule 모델로 변환해준다.
+	// �봽濡쒓렇�옩�쓣 泥섏쓬�궗�븣 �뤃�뜑�궡�뿉 �엳�뒗 json�뙆�씪�쓣 紐⑤몢 �씫�뼱���꽌
+	// �뙆�떛�빐�꽌 Schedule 紐⑤뜽濡� 蹂��솚�빐以��떎.
 	private void readFiles() {
 		File folder = new File(".");
 		File[] listOfFiles = folder.listFiles();
@@ -31,7 +30,7 @@ public class CalendarController {
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		    	if (file.getName().startsWith("2021")) {//2021로 시작하는 파일만 가져온다
+		    	if (file.getName().startsWith("2021")) {//2021濡� �떆�옉�븯�뒗 �뙆�씪留� 媛��졇�삩�떎
 					try {
 						fileReader = new FileReader(file.getName());
 					    JsonReader reader = new JsonReader(fileReader);
@@ -50,7 +49,7 @@ public class CalendarController {
 	public void addNewScheudle(ScheduleModel schedule) {
 		try {
 			writeNewSchedule(schedule);
-			//calendar panel 없데이트 해주자!!
+			//calendar panel �뾾�뜲�씠�듃 �빐二쇱옄!!
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
