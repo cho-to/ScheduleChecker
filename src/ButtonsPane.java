@@ -1,8 +1,10 @@
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -10,20 +12,30 @@ import javax.swing.SwingUtilities;
 
 public class ButtonsPane extends JPanel implements ActionListener {
 	JButton addEventButton;
-	JButton lightningButton;
+	JButton appoinmentButton;
 	JButton chatButton;
 	private CalendarController calendarController;
-
+	
 	ButtonsPane() {
-		setLayout(new GridLayout(3, 1));
-		addEventButton = new JButton("ì¼ì • ì…ë ¥");
-		lightningButton = new JButton("ë²ˆê°œ ëª¨ì„");
-		chatButton = new JButton("ì±„íŒ…");
-
+		setBackground(Color.white);
+		//¾ÆÀÌÄÜµµ Ãß°¡ÇÏ¸é ÁÁÀ» µí 
+		addEventButton = new JButton("add events");
+		appoinmentButton = new JButton("make impromptu appointment");
+		chatButton = new JButton("chatting");
 		add(addEventButton);
-		add(lightningButton);
+		add(appoinmentButton);
 		add(chatButton);
 		addEventButton.addActionListener(this);
+		
+		addEventButton.setOpaque(true);
+		appoinmentButton.setOpaque(true);
+		chatButton.setOpaque(true);
+		addEventButton.setBackground(Color.white);
+		appoinmentButton.setBackground(Color.white);
+		chatButton.setBackground(Color.white);
+		
+		setLayout(new GridLayout(0,1,2,2));//Çà,¿­, ¼öÆògap, ¼öÁ÷gap
+		setBorder(BorderFactory.createEmptyBorder(10, 5, 40, 15));//»ó.ÁÂ.ÇÏ.¿ì
 	}
 
 	public void setCalendarController(CalendarController calendarController) {
@@ -34,7 +46,7 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addEventButton) {
         	new NewScheduleDialog(calendarController);
-        } //ë‹¤ì´ì–¼ë¡œê·¸ ì œê±°
+        } 
 		
 	}
 }
