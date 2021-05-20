@@ -34,7 +34,7 @@ public class ButtonsPane extends JPanel implements ActionListener {
 		appoinmentButton.setBackground(Color.white);
 		chatButton.setBackground(Color.white);
 		
-		setLayout(new GridLayout(0,1,2,2));//행,열, 수평gap, 수직gap
+		setLayout(new GridLayout(0,1,2,2));
 		setBorder(BorderFactory.createEmptyBorder(10, 5, 40, 15));//상.좌.하.우
 	}
 

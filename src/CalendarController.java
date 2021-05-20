@@ -5,24 +5,34 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 
 public class CalendarController {
 	private CalendarPane calendarPane;
+	private TodoPane todoPane;
 	private Gson gson = new Gson();
-	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();//ï¿½ï¿½ï¿½ì—¯ï¿½ê½•ï¿½ì ™ Studentåª›ì•¹ê»œï§ï¿½ ï¿½ê¶—ï¿½ìŠœåª›ï¿½ï¿½ë’«
+	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();
 
-	CalendarController(CalendarPane calendarPane){
+	CalendarController(CalendarPane calendarPane, TodoPane todoPane){
 		this.calendarPane = calendarPane;
+		this.todoPane = todoPane;
 		readFiles();
-		System.out.println(schedules.size()); //ï¿½ï¿½ï¿½ì˜£ï¿½ë¦ºï¿½ë¼±ï¿½ì—³ï¿½ë’— ï¿½ì”ªï¿½ì ™ åª›ï¿½ï¿½ë‹” (ï¿½ì†—ï¿½ì”¤ï¿½ìŠœ)
+		System.out.println(schedules.size()); 
 		
+		//TODO: sortÇØ¼­ ¿À´Ã±âÁØÀ¸·Î ÃÖ±Ù 5°³·Î Á¤·ÄÇØ¾ß
+		Date now = new Date();
+		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
+		impendingSchedules.removeIf(s -> s.getDateInDateType().compareTo(now) < 0);
+		todoPane.showImpending(impendingSchedules.subList(0, 1));
+		System.out.println(impendingSchedules.size()); 
+		System.out.println(schedules.size()); 
 	}
 	
-	// ï¿½ë´½æ¿¡ì’“ë ‡ï¿½ì˜©ï¿½ì“£ ï§£ì„ì“¬ï¿½ê¶—ï¿½ë¸£ ï¿½ë¤ƒï¿½ëœ‘ï¿½ê¶¡ï¿½ë¿‰ ï¿½ì—³ï¿½ë’— jsonï¿½ë™†ï¿½ì”ªï¿½ì“£ ï§â‘¤ëª¢ ï¿½ì”«ï¿½ë¼±ï¿½ï¿½ï¿½ê½Œ
-	// ï¿½ë™†ï¿½ë–›ï¿½ë¹ï¿½ê½Œ Schedule ï§â‘¤ëœ½æ¿¡ï¿½ è¹‚ï¿½ï¿½ì†šï¿½ë¹ä»¥ï¿½ï¿½ë–.
+	//ÃÖ»ó´Ü µğ·ºÅä¸®¿¡ ÀúÀåµÇ¾îÀÖ´Â json ÆÄÀÏµéÀ» ÀĞ¾î¿Í¼­ 
+	//»ç¿ëÇÒ¼ö ÀÖ´Â ÀÚ¹Ù °´Ã¼·Î º¯È¯½ÃÄÑÁØ´Ù
 	private void readFiles() {
 		File folder = new File(".");
 		File[] listOfFiles = folder.listFiles();
@@ -30,7 +40,7 @@ public class CalendarController {
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		    	if (file.getName().startsWith("2021")) {//2021æ¿¡ï¿½ ï¿½ë–†ï¿½ì˜‰ï¿½ë¸¯ï¿½ë’— ï¿½ë™†ï¿½ì”ªï§ï¿½ åª›ï¿½ï¿½ì¡‡ï¿½ì‚©ï¿½ë–
+		    	if (file.getName().startsWith("2021")) {// ÆÄÀÏÀÌ 2021·Î ½ÃÀÛÇÏ´Â°Í¸¸ º¯È­ÇÑ´Ù
 					try {
 						fileReader = new FileReader(file.getName());
 					    JsonReader reader = new JsonReader(fileReader);
@@ -48,9 +58,7 @@ public class CalendarController {
 	
 	public void addNewScheudle(ScheduleModel schedule) {
 		try {
-			writeNewSchedule(schedule);
-			//calendar panel ï¿½ë¾¾ï¿½ëœ²ï¿½ì” ï¿½ë“ƒ ï¿½ë¹äºŒì‡±ì˜„!!
-			
+			writeNewSchedule(schedule);			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -33,6 +33,7 @@ public class WeatherHandler {
 	                sb.append(line);
 	            }
 	            
+	            //json parser를 이용하여 필요한 정보들을 Weather 객체로 변활시켜준다.
 			    Gson gson = new Gson();
 	            JsonObject response = JsonParser.parseString(sb.toString()).getAsJsonObject();
 			    WeatherGroupModel[] temp = gson.fromJson(response.get("daily").getAsJsonArray(), WeatherGroupModel[].class);
@@ -41,6 +42,9 @@ public class WeatherHandler {
 			    for (int i = 0; i < temp.length; i++) {	
 			    	weathers.add(temp[i].weather[0]);
 		    	}
+			    
+			    //test용
+			    weathers.forEach(item -> System.out.println(item.description));
 			    
 			    return weathers;
 	        }
