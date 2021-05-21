@@ -43,7 +43,7 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
         		
         addTextfield("title ", titleTextField, panel1);
         addTextfield("date (YYYY-MM-DD date)", dateTextField, panel1);
-        addTextfield("time (hour:min) ", timeTextField, panel1);
+        addTextfield("time (hour-min) ", timeTextField, panel1);
         addTextfield("meno", memoTextField, panel1);
         
         panel2 = new JPanel();

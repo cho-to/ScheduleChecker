@@ -19,7 +19,7 @@ public class ScheduleModel {
 	}
 
 	public Date getDateInDateType() {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm");
 		Date date;
 		try {
 			date = format.parse(id);
