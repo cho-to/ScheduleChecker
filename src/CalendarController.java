@@ -32,7 +32,13 @@ public class CalendarController {
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		    	if (file.getName().startsWith("2021")) {// 파일이 2021로 시작하는것만 변화한다
+		    	String extension = "";
+		    	int i = file.getName().lastIndexOf('.');
+		    	if (i > 0) {
+		    	    extension = file.getName().substring(i+1);
+		    	}
+		    	System.out.println(extension);
+		    	if (extension.equals("json")) {// 파일이 2021로 시작하는것만 변화한다
 					try {
 						fileReader = new FileReader(file.getName());
 					    JsonReader reader = new JsonReader(fileReader);
@@ -60,7 +66,7 @@ public class CalendarController {
 	private void writeNewSchedule(ScheduleModel schedule) throws IOException {
 		String json = gson.toJson(schedule);
 		ScheduleModel test = gson.fromJson(json, ScheduleModel.class);
-	    Files.write(Paths.get(schedule.id), json.getBytes());
+	    Files.write(Paths.get(schedule.id + ".json"), json.getBytes());
 	}
 	
 	private void configureTodo() {
