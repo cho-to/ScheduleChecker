@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -8,32 +11,30 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 public class CalendarPane extends JPanel {
-	static final int Cal_Width = 7;
+	static final int Cal_Width = 7;//-> 반대로 된 것 덜고쳤을 수도
 	final static int Cal_Height = 6;
-	int dates[][] = new int[Cal_Width][Cal_Height];
-	Calendar cal_day = Calendar.getInstance();
+	int dates[][] = new int[Cal_Height][Cal_Width];
+	
+	Calendar cal_day = Calendar.getInstance();//5월 달력
 	//상수 string
 	final String day_string_name[] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
 	//LineBorder lb;
 	JLabel calendarLabel;
 	JButton dayName[] = new JButton[7];//맨 위에 요일 줄 표시
-	JButton dateButton[][] = new JButton[Cal_Width][Cal_Height];// 각 date 버튼
+	JButton dateButton[][] = new JButton[Cal_Height][Cal_Width];// 각 date 버튼
 	
-	//버튼 누르면 동작하는 거 시간되면 만들기
-	//=>listenForDateButs implements ActionListener
-	
-	//calendar 구현
+	//calendar gui 구현
 	CalendarPane() {
 		//calendarLabel = new JLabel("calendar");
 		//add(calendarLabel);
 		setBackground(Color.white);
-		//달력 모양 만들기
 		
 		//요일
 		for (int i =0; i< Cal_Width; i++) {
@@ -55,16 +56,17 @@ public class CalendarPane extends JPanel {
 		}
 		
 		//날짜
-		for (int i =0; i < Cal_Width; i++) {
-			for (int j = 0; j < Cal_Height; j++) {
+		for (int i =0; i < Cal_Height; i++) {
+			for (int j = 0; j < Cal_Width; j++) {
 				dateButton[i][j] = new JButton();
 				add(dateButton[i][j]);
 				dateButton[i][j].setBorderPainted(false);//테두리 없에기
 				dateButton[i][j].setContentAreaFilled(false);//클릭해도 소용없게
 				dateButton[i][j].setFocusPainted(false);//버튼 누를때 테두리 안생기게
 				dateButton[i][j].setOpaque(true);//배경색 불투명하게->굳이?
-				dateButton[i][j].setBackground(Color.black);//굳이 배경색 
-	
+				dateButton[i][j].setBackground(Color.lightGray);//굳이 배경색 
+				dateButton[i][j].setHorizontalAlignment(SwingConstants.LEFT);
+				dateButton[i][j].setVerticalAlignment(SwingConstants.TOP);;
 				setLayout(new GridLayout(0,7,2,2));//그리드 (채우기)
 				//경계
 				TitledBorder lb = new TitledBorder(new LineBorder(Color.darkGray));
@@ -72,15 +74,16 @@ public class CalendarPane extends JPanel {
 				//setBorder(Color.darkGray); 경계...
 				setBorder(BorderFactory.createEmptyBorder(10, 20, 40, 20));//상.좌.하.우
 				
-				//dateButton[i][j].addActionListener(new ButtonClickListener());
+				dateButton[i][j].addActionListener(new CalendarClickListener());
 			}
 		}
-		//showCal();
 		
+		//달력 표시
+		initCal(cal_day);
+		showCal();
 	}
 	
-	
-	
+	//달력 만들기
 	int month;
 	int year;
 	int last_date;
@@ -88,8 +91,8 @@ public class CalendarPane extends JPanel {
 	
 	private void initCal(Calendar cal){
 		//초기화
-		for(int i = 0 ; i<Cal_Height ; i++){
-			for(int j = 0 ; j<Cal_Width ; j++){
+		for(int i = 0 ; i < Cal_Height ; i++){
+			for(int j = 0 ; j < Cal_Width ; j++){
 				dates[i][j] = 0;
 			}
 		}
@@ -114,28 +117,35 @@ public class CalendarPane extends JPanel {
 			else 
 				start_pos = 0;
 			
-			for(int j = start_pos ; j<Cal_Width ; j++){
-				if(day <= last_date)
+			for(int j = start_pos ; j < Cal_Width ; j++){
+				if(day <= last_date) 
 					dates[i][j] = day++;
 			}
 		}
 	}
-
-	/*private void showCal(){
-		for(int i=0;i<Cal_Height;i++){
-			for(int j=0;j<Cal_Width;j++){
-				String fontColor="black";
-				if(j==0) fontColor="red";
-				else if(j==6) fontColor="blue";
+	
+	//해당 날짜에 일정 있으면 표시하기 -> 일정 개수에 따라 표시?
+	private void showCal(){
+		for(int i = 0; i < Cal_Height; i++){
+			for(int j = 0; j < Cal_Width; j++){
+				//날짜 색
+				dateButton[i][j].setFont(new Font("",Font.BOLD, 15));
+				dateButton[i][j].setForeground(Color.darkGray);
+				if(j==0) 
+					dateButton[i][j].setForeground(new Color(200, 50, 50));
+				else if(j==6) 
+					dateButton[i][j].setForeground(new Color(50, 100, 200));
+		
 				//파일에 날짜 입력
-				File f = new File("C:\\Users\\LG-PC\\Desktop\\java_team_projectMemoData/" + year + ( (month + 1) < 10 ? "0" : "")
+				File f = new File("MemoData/" + year + ( (month + 1) < 10 ? "0" : "")
 						+ (month + 1) + (dates[i][j] < 10 ? " 0":"")
 						+ dates[i][j]+".txt");
+				//메모에 저장된 값이 있으면 뭐가 되나 확인 
 				if(f.exists()){
-					dateButton[i][j].setText("<html><b><font color="+fontColor+">"+dates[i][j]+"</font></b></html>");
+					dateButton[i][j].setText(dates[i][j]+"");
 				}
-				else dateButton[i][j].setText("<html><font color="+fontColor+">"+dates[i][j]+"</font></html>");
-				 */
+				//없으면 그냥 표시
+				else dateButton[i][j].setText(dates[i][j]+"");
 				
 				//JLabel todayMark = new JLabel("<html><font color=green>*</html>");-> 오늘 표시
 				//dateButton[i][j].removeAll();
@@ -146,11 +156,27 @@ public class CalendarPane extends JPanel {
 				}*/
 				
 				//0이면 안보이게 
-				/*if(dates[i][j] == 0)
+				if(dates[i][j] == 0)
 					dateButton[i][j].setVisible(false);
 				else
 					dateButton[i][j].setVisible(true);
 			}
 		}
-	}*/
+	}
+	
+	//달력 누르면 동작하는 거
+	private class CalendarClickListener implements ActionListener{
+		public void actionPerformed(ActionEvent e) {
+			int k=0,l=0;
+			for(int i=0 ; i < Cal_Height ; i++){
+				for(int j=0 ; j < Cal_Width ; j++){
+					if(e.getSource() == dateButton[i][j]){ 
+						k=i;
+						l=j;
+					}
+				}
+			}
+			//해당 날짜의 일정 표시하는 창 띄우기 -> 파일 읽어 와서 
+		}
+	}
 }
