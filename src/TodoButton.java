@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -8,6 +9,14 @@ public class TodoButton extends JButton {
 	JLabel dateLabel;
 	JLabel titleLabel;
 	JLabel memoLabel;
+	
+	TodoButton() {
+		setOpaque(true);
+		setBackground(new Color(0,42,126));
+		setBorderPainted(false);
+		setFocusPainted(false);
+		setLayout(new GridLayout(1,0,0,5));
+	}
 	
 	void configure(ScheduleModel schedule) {
 		System.out.println(schedule.dateString);

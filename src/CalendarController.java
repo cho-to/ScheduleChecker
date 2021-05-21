@@ -20,15 +20,7 @@ public class CalendarController {
 		this.calendarPane = calendarPane;
 		this.todoPane = todoPane;
 		readFiles();
-		System.out.println(schedules.size()); 
-		
-		//TODO: sort해서 오늘기준으로 최근 5개로 정렬해야
-		Date now = new Date();
-		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
-		impendingSchedules.removeIf(s -> s.getDateInDateType().compareTo(now) < 0);
-		todoPane.showImpending(impendingSchedules.subList(0, 1));
-		System.out.println(impendingSchedules.size()); 
-		System.out.println(schedules.size()); 
+		configureTodo();
 	}
 	
 	//최상단 디렉토리에 저장되어있는 json 파일들을 읽어와서 
@@ -69,6 +61,14 @@ public class CalendarController {
 		String json = gson.toJson(schedule);
 		ScheduleModel test = gson.fromJson(json, ScheduleModel.class);
 	    Files.write(Paths.get(schedule.id), json.getBytes());
+	}
+	
+	private void configureTodo() {
+		//TODO:새로운 일정을 추가할때도 refresh해야!
+		Date now = new Date();
+		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
+		impendingSchedules.removeIf(s -> s.getDateInDateType().compareTo(now) < 0);
+		todoPane.showImpending(impendingSchedules.subList(0, Math.min(5, impendingSchedules.size())));
 	}
 	
 }

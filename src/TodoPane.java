@@ -23,13 +23,8 @@ public class TodoPane extends JPanel {
 		for (int i =0; i<5; i++) {
 			todoButton[i] = new TodoButton();
 			add(todoButton[i]);
-			todoButton[i].setOpaque(true);
-			todoButton[i].setBackground(new Color(0,42,126));
-			todoButton[i].setBorderPainted(false);
-			todoButton[i].setFocusPainted(false);
-			todoButton[i].setLayout(new GridLayout(1,0,0,5));
-			setBorder(BorderFactory.createEmptyBorder(0, 20, 40, 20));//상.좌.하.우
 		}
+		setBorder(BorderFactory.createEmptyBorder(0, 20, 40, 20));//상.좌.하.우
 		setLayout(new GridLayout(0,1,0,5));//(행,열, 수평gap, 수직gap
 		setBackground(Color.white);
 	}
