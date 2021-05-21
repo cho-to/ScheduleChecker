@@ -3,6 +3,7 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.Socket;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	JButton addEventButton;
 	JButton appoinmentButton;
 	JButton chatButton;
+	Socket socket;
 	private CalendarController calendarController;
 	
 	ButtonsPane() {
@@ -47,6 +49,8 @@ public class ButtonsPane extends JPanel implements ActionListener {
         if (e.getSource() == addEventButton) {
         	new NewScheduleDialog(calendarController);
         } 
-		
+        else if(e.getSource() == chatButton) {
+        	
+        }
 	}
 }

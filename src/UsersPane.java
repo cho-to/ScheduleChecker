@@ -4,10 +4,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class UsersPane extends JPanel {
-	UsersPane() {
-		JLabel temp = new JLabel("UsersPane");
-		add(temp);
-		setBackground(Color.blue);
-
+	
+	private JLabel welcomeLabel, connectLabel;
+	private String id;
+	
+	UsersPane(String id){
+		this.id = id;
+		JLabel welcomeLabel = new JLabel("Welcome [" + id + "] !");
+		add(welcomeLabel);
+		setBackground(Color.white);
 	}
+	
+	
+	
+	
 }

@@ -23,8 +23,10 @@ class SchedulerFrame extends JFrame {
     private ButtonsPane buttonsPane;
     private CalendarPane calendarPane;
     private CalendarController calendarController;
+    private String id;
 	
-	SchedulerFrame() {
+	SchedulerFrame(String id) {
+		this.id = id;
 		setupComp();
 		setupControllers();
 		setTitle("Scheduler");
@@ -36,7 +38,7 @@ class SchedulerFrame extends JFrame {
 	private void setupComp() {
 		calendarPane = new CalendarPane();
 		todoPane = new TodoPane();
-		usersPane = new UsersPane();
+		usersPane = new UsersPane(id);
 		buttonsPane = new ButtonsPane();
 		
 		usersPane.setPreferredSize(new Dimension(1000, 70));
@@ -53,7 +55,7 @@ class SchedulerFrame extends JFrame {
 	}
 	
 	private void setupControllers() {
-		calendarController = new CalendarController(calendarPane);
+		calendarController = new CalendarController(calendarPane, todoPane);
 		buttonsPane.setCalendarController(calendarController);
 	}
 	

@@ -8,8 +8,8 @@ public class ScheduleModel {
 	String id;
 	String dateString;
 	String timeString;
-	String title; // 일정 제목
-	String memo; // 간단한 메모
+	String title; // �씪�젙 �젣紐�
+	String memo; // 媛꾨떒�븳 硫붾え
 	public ScheduleModel(String date, String time, String title, String memo) {
 		this.id = date + " " + time;
 		this.dateString = date;
@@ -19,13 +19,13 @@ public class ScheduleModel {
 	}
 
 	public Date getDateInDateType() {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm");
 		Date date;
 		try {
 			date = format.parse(id);
 			return date;
 		} catch (ParseException e) {
-			// 만약 Date 생성하는데 에러가 나면 현재 시간을 바환한다.
+			// 留뚯빟 Date �깮�꽦�븯�뒗�뜲 �뿉�윭媛� �굹硫� �쁽�옱 �떆媛꾩쓣 諛뷀솚�븳�떎.
 			e.printStackTrace();
 			return Calendar.getInstance().getTime();
 		}

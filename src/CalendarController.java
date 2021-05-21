@@ -5,25 +5,23 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-
+import java.util.Date;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
 public class CalendarController {
 	private CalendarPane calendarPane;
+	private TodoPane todoPane;
 	private Gson gson = new Gson();
-	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();//íƒ€ì…ì„¤ì • Studentê°ì²´ë§Œ ì‚¬ìš©ê°€ëŠ¥
-
-	CalendarController(CalendarPane calendarPane){
+	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();
+	CalendarController(CalendarPane calendarPane, TodoPane todoPane){
 		this.calendarPane = calendarPane;
+		this.todoPane = todoPane;
 		readFiles();
-		System.out.println(schedules.size()); //ì €ì¥ë˜ì–´ìˆëŠ” ì¼ì • ê°¯ìˆ˜ (í™•ì¸ìš©)
-		
+		configureTodo();
 	}
 	
-	
-	// í”„ë¡œê·¸ë¨ì„ ì²˜ìŒí‚¬ë•Œ í´ë”ë‚´ì— ìˆëŠ” jsoníŒŒì¼ì„ ëª¨ë‘ ì½ì–´ì™€ì„œ
-	// íŒŒì‹±í•´ì„œ Schedule ëª¨ë¸ë¡œ ë³€í™˜í•´ì¤€ë‹¤.
+	//ÃÖ»ó´Ü µğ·ºÅä¸®¿¡ ÀúÀåµÇ¾îÀÖ´Â json ÆÄÀÏµéÀ» ÀĞ¾î¿Í¼­ 
+	//»ç¿ëÇÒ¼ö ÀÖ´Â ÀÚ¹Ù °´Ã¼·Î º¯È¯½ÃÄÑÁØ´Ù
 	private void readFiles() {
 		File folder = new File(".");
 		File[] listOfFiles = folder.listFiles();
@@ -31,7 +29,14 @@ public class CalendarController {
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		    	if (file.getName().startsWith("2021")) {//2021ë¡œ ì‹œì‘í•˜ëŠ” íŒŒì¼ë§Œ ê°€ì ¸ì˜¨ë‹¤
+		    	if (file.getName().startsWith("2021")) {// ÆÄÀÏÀÌ 2021·Î ½ÃÀÛÇÏ´Â°Í¸¸ º¯È­ÇÑ´Ù
+		    	String extension = "";
+		    	int i = file.getName().lastIndexOf('.');
+		    	if (i > 0) {
+		    	    extension = file.getName().substring(i+1);
+		    	}
+		    	System.out.println(extension);
+		    	if (extension.equals("json")) {// ÆÄÀÏÀÌ 2021·Î ½ÃÀÛÇÏ´Â°Í¸¸ º¯È­ÇÑ´Ù
 					try {
 						fileReader = new FileReader(file.getName());
 					    JsonReader reader = new JsonReader(fileReader);
@@ -44,14 +49,12 @@ public class CalendarController {
 		    	}
 		    }
 		}
-		
+		}
 	}
 	
 	public void addNewScheudle(ScheduleModel schedule) {
 		try {
-			writeNewSchedule(schedule);
-			//calendar panel ì—†ë°ì´íŠ¸ í•´ì£¼ì!!
-			
+			writeNewSchedule(schedule);			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -62,6 +65,15 @@ public class CalendarController {
 		String json = gson.toJson(schedule);
 		ScheduleModel test = gson.fromJson(json, ScheduleModel.class);
 	    Files.write(Paths.get(schedule.id), json.getBytes());
+	    Files.write(Paths.get(schedule.id + ".json"), json.getBytes());
+	}
+
+	private void configureTodo() {
+		//TODO:»õ·Î¿î ÀÏÁ¤À» Ãß°¡ÇÒ¶§µµ refreshÇØ¾ß!
+		Date now = new Date();
+		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
+		impendingSchedules.removeIf(s -> s.getDateInDateType().compareTo(now) < 0);
+		todoPane.showImpending(impendingSchedules.subList(0, Math.min(5, impendingSchedules.size())));
 	}
 	
 }
