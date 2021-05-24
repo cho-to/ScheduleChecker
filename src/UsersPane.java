@@ -17,9 +17,9 @@ public class UsersPane extends JPanel {
 	private String id;
 	Socket socket;
 	
-	UsersPane(Socket socket, String id) throws IOException{
+	UsersPane(Socket s, String id) throws IOException{
 		this.id = id;
-		this.socket = socket;
+		this.socket = s;
 		
 		welcomeLabel = new JLabel("Welcome [" + id + "] !");
 		add(welcomeLabel);
@@ -33,13 +33,20 @@ public class UsersPane extends JPanel {
 		BufferedReader fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		PrintWriter toServer = new PrintWriter(socket.getOutputStream());
 		
+		
 		toServer.print(id);
+		
 		toServer.flush();
 		
+		
 		String result = fromServer.readLine();
+		
+		System.out.println("ok");
+		
 		UserLabel = new JLabel(result);
 		add(UserLabel);
 		*/
+		
 		
 		setBackground(Color.white);
 	}
