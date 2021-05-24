@@ -9,13 +9,12 @@ import java.util.Date;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
-
 public class CalendarController {
 	private CalendarPane calendarPane;
 	private TodoPane todoPane;
 	private Gson gson = new Gson();
 	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();
-
+	
 	CalendarController(CalendarPane calendarPane, TodoPane todoPane){
 		this.calendarPane = calendarPane;
 		this.todoPane = todoPane;
@@ -33,6 +32,7 @@ public class CalendarController {
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
+		    	if (file.getName().startsWith("2021")) {// ������ 2021�� �����ϴ°͸� ��ȭ�Ѵ�
 		    	String extension = "";
 		    	int i = file.getName().lastIndexOf('.');
 		    	if (i > 0) {
@@ -52,7 +52,7 @@ public class CalendarController {
 		    	}
 		    }
 		}
-		
+		}
 	}
 	
 	public void addNewScheudle(ScheduleModel schedule) {
@@ -69,7 +69,9 @@ public class CalendarController {
 		ScheduleModel test = gson.fromJson(json, ScheduleModel.class);
 	    Files.write(Paths.get(schedule.id + ".json"), json.getBytes());
 	}
-	
+
+
+
 	private void configureTodo() {
 		//TODO:���ο� ������ �߰��Ҷ��� refresh�ؾ�!
 		Date now = new Date();
@@ -77,7 +79,7 @@ public class CalendarController {
 		impendingSchedules.removeIf(s -> s.getDateInDateType().compareTo(now) < 0);
 		todoPane.showImpending(impendingSchedules.subList(0, Math.min(5, impendingSchedules.size())));
 	}
-	
+
 	private void configureDate() {
 		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
 		calendarPane.showSchedule(impendingSchedules.subList(0, impendingSchedules.size()));

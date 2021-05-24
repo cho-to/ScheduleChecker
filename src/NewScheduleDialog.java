@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
-
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -16,14 +15,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class NewScheduleDialog extends JDialog implements ActionListener {
-
     private JPanel panel1, panel2;
     private JLabel label;
     private JButton okayButton;
     private JButton cancelButton;
     private CalendarController calendarController;
     private JTextField titleTextField, dateTextField, timeTextField, memoTextField;
-
     NewScheduleDialog(CalendarController calendarController) {
     	setComp();
     	this.calendarController = calendarController;
@@ -40,12 +37,11 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
         dateTextField = new JTextField();
         timeTextField = new JTextField();
         memoTextField = new JTextField();
-        		
         addTextfield("title ", titleTextField, panel1);
         addTextfield("date (YYYY-MM-DD date)", dateTextField, panel1);
         addTextfield("time (hour-min) ", timeTextField, panel1);
         addTextfield("meno", memoTextField, panel1);
-        
+
         panel2 = new JPanel();
         panel1.add(panel2, BorderLayout.SOUTH);
         okayButton = new JButton("OK");

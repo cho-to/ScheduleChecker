@@ -10,6 +10,7 @@ public class ScheduleModel {
 	String timeString;
 	String title; 
 	String memo; 
+	
 	public ScheduleModel(String date, String time, String title, String memo) {
 		this.id = date + " " + time;
 		this.dateString = date;
@@ -25,7 +26,6 @@ public class ScheduleModel {
 			date = format.parse(id);
 			return date;
 		} catch (ParseException e) {
-			// 
 			e.printStackTrace();
 			return Calendar.getInstance().getTime();
 		}

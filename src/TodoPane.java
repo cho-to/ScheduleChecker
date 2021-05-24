@@ -6,10 +6,9 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-
 public class TodoPane extends JPanel {
 	//todo list ±¸Çö
-
+	
 	TodoButton todoButton[] = new TodoButton[5]; 
 	TodoPane() {
 		JLabel list_title = new JLabel("Todo List");

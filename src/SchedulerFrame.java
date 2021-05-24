@@ -7,6 +7,8 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.Socket;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -23,21 +25,37 @@ class SchedulerFrame extends JFrame {
     private ButtonsPane buttonsPane;
     private CalendarPane calendarPane;
     private CalendarController calendarController;
+    private String id;
+    
+    Socket socket=null;
 	
-	SchedulerFrame() {
+	SchedulerFrame(String id) throws IOException {
+		this.id = id;
+		
+		try{
+			
+         socket=new Socket("192.168.0.40",3000);
+            
+		}catch(IOException ie){
+            System.out.println(ie.getMessage());
+		}
+		
+		
 		setupComp();
 		setupControllers();
 		setTitle("Scheduler");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
       	setSize(1000, 800);
 		setVisible(true);
+		
+		
 	}
 	
-	private void setupComp() {
+	private void setupComp() throws IOException{
 		calendarPane = new CalendarPane();
 		todoPane = new TodoPane();
-		usersPane = new UsersPane();
-		buttonsPane = new ButtonsPane();
+		usersPane = new UsersPane(socket, id);
+		buttonsPane = new ButtonsPane(socket, id);
 		
 		usersPane.setPreferredSize(new Dimension(1000, 70));
 		todoPane.setPreferredSize(new Dimension(300, 600));

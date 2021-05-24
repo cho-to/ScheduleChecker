@@ -3,6 +3,7 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.Socket;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,11 +15,15 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	JButton addEventButton;
 	JButton appoinmentButton;
 	JButton chatButton;
+	Socket socket;
+	String id;
 	private CalendarController calendarController;
 	
-	ButtonsPane() {
+	ButtonsPane(Socket socket, String id) {
 		setBackground(Color.white);
 		//아이콘도 추가하면 좋을 듯 
+		this.socket = socket;
+		this.id = id;
 		addEventButton = new JButton("add events");
 		appoinmentButton = new JButton("make impromptu appointment");
 		chatButton = new JButton("chatting");
@@ -30,6 +35,7 @@ public class ButtonsPane extends JPanel implements ActionListener {
 		addEventButton.setOpaque(true);
 		appoinmentButton.setOpaque(true);
 		chatButton.setOpaque(true);
+		chatButton.addActionListener(this);
 		addEventButton.setBackground(Color.white);
 		appoinmentButton.setBackground(Color.white);
 		chatButton.setBackground(Color.white);
@@ -47,6 +53,8 @@ public class ButtonsPane extends JPanel implements ActionListener {
         if (e.getSource() == addEventButton) {
         	new NewScheduleDialog(calendarController);
         } 
-		
+        else if(e.getSource() == chatButton) {
+        	new ChatFrame(socket, id);
+        }
 	}
 }
