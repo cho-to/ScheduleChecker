@@ -72,6 +72,7 @@ class IdFrame extends JFrame implements ActionListener{
 		if (e.getSource() == EnterButton && idTextField.getText().trim().length() > 0) { 
 			id = idTextField.getText();
 			try {
+				System.out.println("new frame!!");
 				SchedulerFrame frameScheduler = new SchedulerFrame(id);
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
