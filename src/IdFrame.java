@@ -9,6 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -70,7 +71,12 @@ class IdFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {        
 		if (e.getSource() == EnterButton && idTextField.getText().trim().length() > 0) { 
 			id = idTextField.getText();
-			SchedulerFrame frameScheduler = new SchedulerFrame(id);
+			try {
+				SchedulerFrame frameScheduler = new SchedulerFrame(id);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			dispose();
         } 
 		

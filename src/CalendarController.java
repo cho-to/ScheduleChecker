@@ -6,10 +6,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
-<<<<<<< HEAD
-=======
 
->>>>>>> b09a44f8529eb594eb9669a495324d98880133a1
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 public class CalendarController {
@@ -17,10 +14,7 @@ public class CalendarController {
 	private TodoPane todoPane;
 	private Gson gson = new Gson();
 	private ArrayList<ScheduleModel> schedules = new ArrayList<ScheduleModel>();
-<<<<<<< HEAD
-=======
-
->>>>>>> b09a44f8529eb594eb9669a495324d98880133a1
+	
 	CalendarController(CalendarPane calendarPane, TodoPane todoPane){
 		this.calendarPane = calendarPane;
 		this.todoPane = todoPane;
@@ -37,10 +31,7 @@ public class CalendarController {
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-<<<<<<< HEAD
 		    	if (file.getName().startsWith("2021")) {// 파일이 2021로 시작하는것만 변화한다
-=======
->>>>>>> b09a44f8529eb594eb9669a495324d98880133a1
 		    	String extension = "";
 		    	int i = file.getName().lastIndexOf('.');
 		    	if (i > 0) {
@@ -75,16 +66,11 @@ public class CalendarController {
 	private void writeNewSchedule(ScheduleModel schedule) throws IOException {
 		String json = gson.toJson(schedule);
 		ScheduleModel test = gson.fromJson(json, ScheduleModel.class);
-<<<<<<< HEAD
-	    Files.write(Paths.get(schedule.id), json.getBytes());
 	    Files.write(Paths.get(schedule.id + ".json"), json.getBytes());
 	}
 
-=======
-	    Files.write(Paths.get(schedule.id + ".json"), json.getBytes());
-	}
-	
->>>>>>> b09a44f8529eb594eb9669a495324d98880133a1
+
+
 	private void configureTodo() {
 		//TODO:새로운 일정을 추가할때도 refresh해야!
 		Date now = new Date();
