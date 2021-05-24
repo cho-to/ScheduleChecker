@@ -20,10 +20,11 @@ public class CalendarController {
 		this.todoPane = todoPane;
 		readFiles();
 		configureTodo();
+		configureDate();
 	}
 	
-	//ÃÖ»ó´Ü µð·ºÅä¸®¿¡ ÀúÀåµÇ¾îÀÖ´Â json ÆÄÀÏµéÀ» ÀÐ¾î¿Í¼­ 
-	//»ç¿ëÇÒ¼ö ÀÖ´Â ÀÚ¹Ù °´Ã¼·Î º¯È¯½ÃÄÑÁØ´Ù
+	//ï¿½Ö»ï¿½ï¿½ ï¿½ï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ö´ï¿½ json ï¿½ï¿½ï¿½Ïµï¿½ï¿½ï¿½ ï¿½Ð¾ï¿½Í¼ï¿½ 
+	//ï¿½ï¿½ï¿½ï¿½Ò¼ï¿½ ï¿½Ö´ï¿½ ï¿½Ú¹ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½È¯ï¿½ï¿½ï¿½ï¿½ï¿½Ø´ï¿½
 	private void readFiles() {
 		File folder = new File(".");
 		File[] listOfFiles = folder.listFiles();
@@ -31,14 +32,14 @@ public class CalendarController {
 
 		for (File file : listOfFiles) {
 		    if (file.isFile()) {
-		    	if (file.getName().startsWith("2021")) {// ÆÄÀÏÀÌ 2021·Î ½ÃÀÛÇÏ´Â°Í¸¸ º¯È­ÇÑ´Ù
+		    	if (file.getName().startsWith("2021")) {// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2021ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Â°Í¸ï¿½ ï¿½ï¿½È­ï¿½Ñ´ï¿½
 		    	String extension = "";
 		    	int i = file.getName().lastIndexOf('.');
 		    	if (i > 0) {
 		    	    extension = file.getName().substring(i+1);
 		    	}
 		    	System.out.println(extension);
-		    	if (extension.equals("json")) {// ÆÄÀÏÀÌ 2021·Î ½ÃÀÛÇÏ´Â°Í¸¸ º¯È­ÇÑ´Ù
+		    	if (extension.equals("json")) {// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 2021ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´Â°Í¸ï¿½ ï¿½ï¿½È­ï¿½Ñ´ï¿½
 					try {
 						fileReader = new FileReader(file.getName());
 					    JsonReader reader = new JsonReader(fileReader);
@@ -72,11 +73,16 @@ public class CalendarController {
 
 
 	private void configureTodo() {
-		//TODO:»õ·Î¿î ÀÏÁ¤À» Ãß°¡ÇÒ¶§µµ refreshÇØ¾ß!
+		//TODO:ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ò¶ï¿½ï¿½ï¿½ refreshï¿½Ø¾ï¿½!
 		Date now = new Date();
 		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
 		impendingSchedules.removeIf(s -> s.getDateInDateType().compareTo(now) < 0);
 		todoPane.showImpending(impendingSchedules.subList(0, Math.min(5, impendingSchedules.size())));
+	}
+
+	private void configureDate() {
+		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
+		calendarPane.showSchedule(impendingSchedules.subList(0, impendingSchedules.size()));
 	}
 	
 }
