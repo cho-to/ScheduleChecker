@@ -31,15 +31,18 @@ class EchoThread extends Thread{
                     while(true){
                     	
                     	if(isFirst) {
+                    		System.out.println("못받음");
                     		str=br.readLine();
                     		id = str;
+                    		System.out.println("받음!");
+                    		
                     		nameList.add(str);
                     		
                     		PrintWriter toClient = new PrintWriter(socket.getOutputStream());
                     		
                     		String result = null;
                     		for(String name : nameList) {
-                    			result += name + " ";
+                    			result += name;
                     		}
                     		
                     		toClient.println(result);
@@ -95,12 +98,6 @@ class EchoThread extends Thread{
              }
        }
        
-       public void sendUser() {
-    	  
-    	   
-    	   
-       }
-       
        
        
        
@@ -123,11 +120,11 @@ public class ChatServer {
                     server= new ServerSocket(3000);
                     while(true){
                     		
-                           System.out.println("Connecting Server...");
+                           System.out.println("Waiting for server");
                            socket = server.accept(); //클라이언트와 연결된 소켓을 벡터에 담기
                            vec.add(socket);
                            new EchoThread(socket, vec, nameList).start(); //스레드 구동
-
+                           System.out.println("Someone connected");
                     }
 
              }catch(IOException ie){
