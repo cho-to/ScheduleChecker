@@ -33,9 +33,7 @@ class SchedulerFrame extends JFrame {
 		this.id = id;
 		
 		try{
-			
-         socket=new Socket("192.168.0.40",3000);
-            
+         socket=new Socket("localhost",3000);
 		}catch(IOException ie){
             System.out.println(ie.getMessage());
 		}

@@ -13,7 +13,7 @@ class EchoThread extends Thread{
        String id;
        Vector<Socket> socketList; // Vector -> 동기화된 메소드로 구성 -> 멀티스레드 환경에서 안전하게 객체 추가 및 삭제 가능
        Vector<String> nameList;
-       boolean isFirst = false;
+       boolean isFirst = true;
        
        public EchoThread(Socket socket, Vector<Socket> vec, Vector<String> nameList){
              this.socket = socket;
@@ -23,40 +23,36 @@ class EchoThread extends Thread{
 
        //클라이언트 -> 서버 -> 다른 클라이언트 (문자열로 받아서 str에 저장 후 sendmsg)
        public void run(){    	   
-             BufferedReader br = null;
+             BufferedReader fromClient = null;
              try{
-                    br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
+                    
                     String str =null;
-
+                    
                     while(true){
                     	
                     	if(isFirst) {
-                    		System.out.println("못받음");
-                    		str=br.readLine();
+                    		
+                    		str=fromClient.readLine();
                     		id = str;
-                    		System.out.println("받음!");
                     		
                     		nameList.add(str);
-                    		
-                    		PrintWriter toClient = new PrintWriter(socket.getOutputStream());
-                    		
-                    		String result = null;
+                   
+                    		String result = "" ;
                     		for(String name : nameList) {
-                    			result += name;
+                    			result += name + ", ";
                     		}
                     		
                     		toClient.println(result);
                     		toClient.flush();
                     		
                     		isFirst = false;
-                    	}
-                    	else {
+                    	}else {
                     		//클라이언트로 부터 문자열 받기
-                           str=br.readLine();
-                           
+                           str=fromClient.readLine();
                            //상대가 접속을 끊으면 break;
                            if(str==null){
-                                 //벡터에서 없애기
                                  socketList.remove(socket);
                                  nameList.remove(id);
                                  break;
@@ -67,12 +63,15 @@ class EchoThread extends Thread{
                     }                 
              }
              catch(IOException ie){
+            	 	
+            	 	socketList.remove(socket);
+            	 	nameList.remove(id);
                     System.out.println(ie.getMessage());
              }
              finally{
                     try{
                     	//if the connection die, close br & socket
-                           if(br != null) br.close();
+                           if(fromClient != null) fromClient.close();
                            if(socket != null) socket.close();
                     }catch(IOException ie){
                            System.out.println(ie.getMessage());
@@ -87,9 +86,9 @@ class EchoThread extends Thread{
                     for(Socket socket:socketList){
                     	   //메세지 보낸 socket은 제외
                            if(socket != this.socket){
-                                 PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
-                                 pw.println(str);
-                                 pw.flush();
+                                 PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
+                                 toClient.println(str);
+                                 toClient.flush();
                                  //여기서 소켓 바로 닫으면 걍 다른애들 꺼짐..
                            }
                     }
@@ -120,7 +119,7 @@ public class ChatServer {
                     server= new ServerSocket(3000);
                     while(true){
                     		
-                           System.out.println("Waiting for server");
+                           System.out.println("Waiting for client...");
                            socket = server.accept(); //클라이언트와 연결된 소켓을 벡터에 담기
                            vec.add(socket);
                            new EchoThread(socket, vec, nameList).start(); //스레드 구동
