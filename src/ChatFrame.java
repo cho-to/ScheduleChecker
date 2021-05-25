@@ -74,7 +74,6 @@ class ReadThread extends Thread{
     ChatFrame cf;
     String id;
     
-    
     public ReadThread(Socket socket, ChatFrame cf) {
           this.cf = cf;
           this.socket=socket;
@@ -82,22 +81,15 @@ class ReadThread extends Thread{
     }
 
     public void run() {
-          BufferedReader br=null;
+          BufferedReader fromServer=null;
           try{
-                 //서버로부터 전송된 문자열 읽어오기 위한 스트림객체 생성
-                 br=new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 fromServer=new BufferedReader(new InputStreamReader(socket.getInputStream()));
                  while(true){
-                        //소켓으로부터 문자열 읽어옴
-              
-                 	
-                        String str=br.readLine();
+                        String str=fromServer.readLine();
                         if(str==null){
                               System.out.println("접속이 끊겼음");
                               break;
                         }
-
-                        //전송받은 문자열 화면에 출력
-                        //System.out.println("[server] " + str);
                         cf.txtArea.append(str+"\n");
                  }
 
@@ -106,7 +98,7 @@ class ReadThread extends Thread{
           }finally{
 
                  try{
-                        if(br!=null) br.close();
+                        if(fromServer!=null) fromServer.close();
                         //if(socket!=null) socket.close();
                  }catch(IOException ie){}
 
