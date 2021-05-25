@@ -79,7 +79,7 @@ class SchedulerFrame extends JFrame {
 	}
 	
 	private void setupControllers() {
-		calendarController = new CalendarController(calendarPane, todoPane);
+		calendarController = new CalendarController(calendarPane, todoPane, this.id);
 		buttonsPane.setCalendarController(calendarController);
 	}
 	

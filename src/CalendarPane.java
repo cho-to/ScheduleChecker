@@ -388,7 +388,6 @@ public class CalendarPane extends JPanel {
 				    }
 				}
 				
-
 			}
 		}
 	}
