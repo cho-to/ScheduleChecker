@@ -33,12 +33,11 @@ class EchoThread extends Thread{
                     while(true){
                     	
                     	if(isFirst) {
-                    		
+         
                     		str=fromClient.readLine();
                     		id = str;
-                    		
                     		nameList.add(str);
-                   
+                    		
                     		String result = "" ;
                     		for(String name : nameList) {
                     			result += name + ", ";
@@ -46,31 +45,29 @@ class EchoThread extends Thread{
                     		
                     		toClient.println(result);
                     		toClient.flush();
-                    		
                     		isFirst = false;
                     	}else {
-                    		//클라이언트로 부터 문자열 받기
+                    		
                            str=fromClient.readLine();
-                           //상대가 접속을 끊으면 break;
+                           
                            if(str==null){
                                  socketList.remove(socket);
                                  nameList.remove(id);
                                  break;
                            }
-                           //연결된 소켓들을 통해서 다른 클라이언트에게 문자열 보내주기
+                           
                            sendMsg(str);    
                     	}
                     }                 
              }
              catch(IOException ie){
-            	 	
+            	 	//접속이 끊어질 때
             	 	socketList.remove(socket);
             	 	nameList.remove(id);
                     System.out.println(ie.getMessage());
              }
              finally{
                     try{
-                    	//if the connection die, close br & socket
                            if(fromClient != null) fromClient.close();
                            if(socket != null) socket.close();
                     }catch(IOException ie){
@@ -97,12 +94,7 @@ class EchoThread extends Thread{
              }
        }
        
-       
-       
-       
 }
-
- 
 
  
 public class ChatServer {
