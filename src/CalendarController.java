@@ -91,8 +91,6 @@ public class CalendarController {
 	    Files.write(Paths.get(id,schedule.id + ".json"), json.getBytes());
 	}
 
-
-
 	private void configureTodo() {
 		//TODO:占쏙옙占싸울옙 占쏙옙占쏙옙占쏙옙 占쌩곤옙占쌀띰옙占쏙옙 refresh占쌔억옙!
 		Date now = new Date();

@@ -31,34 +31,43 @@ class EchoThread extends Thread{
                     String str =null;
                     
                     while(true){
-                    	
-                    	if(isFirst) {
-                    		
-                    		str=fromClient.readLine();
-                    		id = str;
-                    		
-                    		nameList.add(str);
-                   
-                    		String result = "" ;
-                    		for(String name : nameList) {
-                    			result += name + ", ";
-                    		}
-                    		
-                    		toClient.println(result);
-                    		toClient.flush();
-                    		
-                    		isFirst = false;
-                    	}else {
-                    		//클라이언트로 부터 문자열 받기
-                           str=fromClient.readLine();
-                           //상대가 접속을 끊으면 break;
-                           if(str==null){
-                                 socketList.remove(socket);
-                                 nameList.remove(id);
-                                 break;
-                           }
-                           //연결된 소켓들을 통해서 다른 클라이언트에게 문자열 보내주기
-                           sendMsg(str);    
+                    	String type = fromClient.readLine();
+                    	System.out.println(type);
+                    	if (type != null) {
+                    		if (type.equals("user")) {
+                        		if(isFirst) {
+                            		
+                            		str=fromClient.readLine();
+                            		id = str;
+                            		
+                            		nameList.add(str);
+                           
+                            		String result = "" ;
+                            		for(String name : nameList) {
+                            			result += name + ", ";
+                            		}
+                            		toClient.println("user");
+                            		toClient.println(result);
+                            		toClient.flush();
+                            		
+                            		isFirst = false;
+                            	}else {
+                            		//클라이언트로 부터 문자열 받기
+                                   str=fromClient.readLine();
+                                   //상대가 접속을 끊으면 break;
+                                   if(str==null){
+                                         socketList.remove(socket);
+                                         nameList.remove(id);
+                                         break;
+                                   }
+                                   //연결된 소켓들을 통해서 다른 클라이언트에게 문자열 보내주기
+                                   sendMsg(str);    
+                            	}
+                        	} else if (type.equals("lightning")) {
+                        		System.out.println("server : light!!!");
+                        		str=fromClient.readLine();
+                        		sendSchedule("hello light");
+                        	}
                     	}
                     }                 
              }
@@ -87,6 +96,7 @@ class EchoThread extends Thread{
                     	   //메세지 보낸 socket은 제외
                            if(socket != this.socket){
                                  PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
+                                 toClient.println("user");
                                  toClient.println(str);
                                  toClient.flush();
                                  //여기서 소켓 바로 닫으면 걍 다른애들 꺼짐..
@@ -96,8 +106,24 @@ class EchoThread extends Thread{
                     System.out.println(ie.getMessage());
              }
        }
-       
-       
+       public void sendSchedule(String str){
+           try{
+                  for(Socket socket:socketList){
+                  	   //메세지 보낸 socket은 제외
+//                         if(socket != this.socket){
+//                               //여기서 소켓 바로 닫으면 걍 다른애들 꺼짐..
+//                         }
+                      PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
+                      toClient.println("lightning");
+                      toClient.println(str);
+                      toClient.flush();
+
+                  }
+           }catch(IOException ie){
+                  System.out.println(ie.getMessage());
+           }
+     }
+
        
        
 }

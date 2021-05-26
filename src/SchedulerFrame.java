@@ -8,7 +8,10 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.BoxLayout;
@@ -39,19 +42,21 @@ class SchedulerFrame extends JFrame {
 			
 //         socket=new Socket("192.168.0.40",3000);
          socket=new Socket("localhost",3000);
+ 		setupComp();
+ 		setupControllers();
+ 		setTitle("Scheduler");
+ 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+       	setSize(1000, 800);
+ 		setVisible(true);
+ 		
+         new FooThread(socket, this).start();
+
 		}catch(IOException ie){
             System.out.println(ie.getMessage());
 		}
 		
 		
-		setupComp();
-		setupControllers();
-		setTitle("Scheduler");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
-      	setSize(1000, 800);
-		setVisible(true);
-		
-		
+
 	}
 	
 	private void setupComp() throws IOException{
@@ -82,4 +87,40 @@ class SchedulerFrame extends JFrame {
 		buttonsPane.setCalendarController(calendarController);
 	}
 	
+	
+}
+
+class FooThread extends Thread{
+
+    Socket socket;
+    SchedulerFrame f;
+    String id;
+    
+    public FooThread(Socket socket, SchedulerFrame f) {
+          this.f = f;
+          this.socket=socket;
+    }
+
+    public void run() {
+		BufferedReader fromServer = null;
+		try {
+			fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	    	while(true) {
+				String type = fromServer.readLine();
+				String result = fromServer.readLine();
+				if (type != null) {
+	    			if (type.equals("lightning")) {
+	    				
+	    			}
+				}
+
+	    	}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+    }
+
 }
