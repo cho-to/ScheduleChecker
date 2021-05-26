@@ -3,6 +3,10 @@ import java.awt.GridLayout;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.BorderFactory;
@@ -31,7 +35,7 @@ public class ButtonsPane extends JPanel implements ActionListener {
 		add(appoinmentButton);
 		add(chatButton);
 		addEventButton.addActionListener(this);
-		
+		appoinmentButton.addActionListener(this);
 		addEventButton.setOpaque(true);
 		appoinmentButton.setOpaque(true);
 		chatButton.setOpaque(true);
@@ -56,5 +60,23 @@ public class ButtonsPane extends JPanel implements ActionListener {
         else if(e.getSource() == chatButton) {
         	new ChatFrame(socket, id);
         }
+        else if(e.getSource() == appoinmentButton) {
+        	BufferedReader fromServer = null;
+        	PrintWriter toServer = null;
+
+    		try {
+				fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+	    		toServer = new PrintWriter(socket.getOutputStream(), true);
+	    		toServer.println("lightning");
+	    		toServer.println(id);//나중에 바꾸
+	    		toServer.flush();
+
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+        }
+
 	}
 }

@@ -162,6 +162,7 @@ public class CalendarPane extends JPanel {
 	private void showCal(){
 		for(int i = 0; i < Cal_Height; i++){
 			for(int j = 0; j < Cal_Width; j++){
+				
 				//날짜 색
 				dateButton[i][j].setFont(new Font("",Font.BOLD, 15));
 				dateButton[i][j].setForeground(Color.darkGray);
@@ -228,6 +229,29 @@ public class CalendarPane extends JPanel {
 					System.out.println(row);
 					System.out.println(col);
 					System.out.println(times[row][col]);
+					
+					
+					
+					//개수에 따른 달력 색
+					if (numOfSchedule[i][j] >= 1 && numOfSchedule[i][j] <= 2) {// 1~2개 노란색
+						//System.out.println("*****************one");
+						dateButton[i][j].setOpaque(true);
+						dateButton[i][j].setBackground(Color.yellow);
+					}
+					if (numOfSchedule[i][j] >= 3 && numOfSchedule[i][j] <= 5) {// 3~5개 주황색
+						//System.out.println("*****************one");
+						dateButton[i][j].setOpaque(true);
+						dateButton[i][j].setBackground(Color.orange);
+					}
+					if (numOfSchedule[i][j] >= 6) {// 6~개 빨간색
+						//System.out.println("*****************one");
+						dateButton[i][j].setOpaque(true);
+						dateButton[i][j].setBackground(Color.red);
+					}
+					
+					
+					
+					
 					//버튼에 출력 
 					if (!checkSchedule1[i][j]) {//첫번째 날짜 표시
 						s1 = new JLabel(schedule);
@@ -388,6 +412,10 @@ public class CalendarPane extends JPanel {
 				    }
 				}
 				
+/*<<<<<<< HEAD
+			
+=======
+>>>>>>> 9da79acdd753f54dc70af3cf07022bf865b81c14*/
 			}
 		}
 	}

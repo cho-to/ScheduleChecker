@@ -53,12 +53,17 @@ public class UsersPane extends JPanel {
 		fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		toServer = new PrintWriter(socket.getOutputStream(), true);
 		
+		toServer.println("user");
 		toServer.println(id);
 		toServer.flush();
 		
+		String type = fromServer.readLine();
 		String result = fromServer.readLine();
-		
-		UserLabel = new JLabel("Online Users : " + result);
+
+		if (type.equals("user")) {
+			UserLabel = new JLabel("Online Users : " + result);
+		}
+
 		
 		
 		
@@ -78,9 +83,6 @@ public class UsersPane extends JPanel {
 		add(welcomeLabel);
 		add(connectLabel);
 		add(UserLabel);
-		
-		
-		
 		
 		setBackground(Color.white);
 	}
