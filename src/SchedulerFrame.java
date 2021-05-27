@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.google.gson.Gson;
+
 
 class SchedulerFrame extends JFrame {
 
@@ -37,22 +39,22 @@ class SchedulerFrame extends JFrame {
 	
 	SchedulerFrame(String id) throws IOException {
 		this.id = id;
-		
+
 		try{
-			
-//         socket=new Socket("192.168.0.40",3000);
-         socket=new Socket("localhost",3000);
- 		setupComp();
- 		setupControllers();
- 		setTitle("Scheduler");
- 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-       	setSize(1000, 800);
- 		setVisible(true);
- 		
-        new FooThread(socket, usersPane).start();
+
+			//socket=new Socket("192.168.0.40",3000);
+			socket=new Socket("localhost",3000);
+			setupComp();
+			setupControllers();
+			setTitle("Scheduler");
+			setDefaultCloseOperation(EXIT_ON_CLOSE);
+			setSize(1000, 800);
+			setVisible(true);
+
+			new FooThread(socket,usersPane, this, calendarController).start();
 
 		}catch(IOException ie){
-            System.out.println(ie.getMessage());
+			System.out.println(ie.getMessage());
 		}
 		
 		
@@ -60,7 +62,7 @@ class SchedulerFrame extends JFrame {
 	}
 	
 	private void setupComp() throws IOException{
-		calendarPane = new CalendarPane();
+		calendarPane = new CalendarPane(id);
 		todoPane = new TodoPane();
 		weatherPane = new WeatherPane();
 		weatherPane.setPreferredSize(new Dimension(300, 300));
@@ -85,6 +87,7 @@ class SchedulerFrame extends JFrame {
 	private void setupControllers() {
 		calendarController = new CalendarController(calendarPane, todoPane, this.id);
 		buttonsPane.setCalendarController(calendarController);
+		calendarPane.setController(calendarController);
 	}
 	
 	
@@ -93,12 +96,18 @@ class SchedulerFrame extends JFrame {
 class FooThread extends Thread{
 
     Socket socket;
+
     UsersPane usersPane;
     String id;
+    SchedulerFrame f;
+    CalendarController controller;
+    private Gson gson = new Gson();
     
-    public FooThread(Socket socket, UsersPane usersPane) {
+    public FooThread(Socket socket, UsersPane usersPane, SchedulerFrame f, CalendarController controller) {
           this.usersPane = usersPane;
+          this.f = f;
           this.socket=socket;
+          this.controller = controller;
     }
 
     public void run() {
@@ -110,7 +119,9 @@ class FooThread extends Thread{
 				String result = fromServer.readLine();
 				if (type != null) {
 	    			if (type.equals("lightning")) {
-	    				
+	    				System.out.println("received text : " +result);
+	    				ScheduleModel receivedSchedule = gson.fromJson(result, ScheduleModel.class);
+	    				controller.addNewScheudle(receivedSchedule);
 	    			}
 	    			else if (type.equals("user")) {
 	    				System.out.println("user changed");
