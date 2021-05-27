@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Frame;
@@ -31,41 +32,35 @@ import javax.swing.border.TitledBorder;
 import com.google.gson.stream.JsonReader;
 
 public class CalendarPane extends JPanel {
-	static final int Cal_Width = 7;//-> 반대로 된 것 덜고쳤을 수도
+	static final int Cal_Width = 7;
 	final static int Cal_Height = 6;
 	int dates[][] = new int[Cal_Height][Cal_Width];
-	String schedule;
-	Calendar cal_day = Calendar.getInstance();//5월 달력
-	//상수 string
 	final String day_string_name[] = {"SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"};
-	//LineBorder lb;
-	JLabel calendarLabel;
+	Calendar cal_day = Calendar.getInstance();//5월 달력
 	JButton dayName[] = new JButton[7];//맨 위에 요일 줄 표시
 	JButton dateButton[][] = new JButton[Cal_Height][Cal_Width];// 각 date 버튼
 	JButton deleteButton[];//일정 삭제 버튼
-	Boolean checkSchedule1[][] = new Boolean [Cal_Height][Cal_Width];
-	Boolean checkSchedule2[][] = new Boolean [Cal_Height][Cal_Width];//일정이 달력에 입력됐는지 확인
+	Boolean checkSchedule1[][] = new Boolean [Cal_Height][Cal_Width];//일정이 달력에 입력됐는지 확인
+	Boolean checkSchedule2[][] = new Boolean [Cal_Height][Cal_Width];
 	String scheduleList[][] = new String [Cal_Height][Cal_Width];//일정 배열
 	int numOfSchedule[][] = new int [Cal_Height][Cal_Width];//일정 개수
 	String times[][] = new String[32][101];//시간[날짜][numOfSchedule]
 	int todayNumX = 0, todayNumY = 0; //열러는 날짜의 인덱스
-	String[] scheduleName = new String[101];
-	
+	String schedule; String[] scheduleName = new String[101];
 
 	//calendar gui 구현
 	CalendarPane() {
 		setBackground(Color.white);
-		
 		//요일
 		for (int i =0; i< Cal_Width; i++) {
 			dayName[i]=new JButton(day_string_name[i]);
 			add(dayName[i]);
-			dayName[i].setBorderPainted(false);//테두리 없에기
+			dayName[i].setBorderPainted(false);
 			dayName[i].setContentAreaFilled(false);//클릭해도 소용없게
 			dayName[i].setFocusPainted(false);//버튼 누를때 테두리 안생기게
 			dayName[i].setOpaque(true);//배경색 불투명하게->
 			//배경 색
-			dayName[i].setBackground(Color.white/*new Color(200, 50, 50)*/);//-
+			dayName[i].setBackground(Color.white);
 			//요일별 글자색
 			if (i == 0)
 				dayName[i].setForeground(new Color(200, 50, 50));
@@ -87,14 +82,10 @@ public class CalendarPane extends JPanel {
 				dateButton[i][j].setBackground(Color.white);
 				dateButton[i][j].setHorizontalAlignment(SwingConstants.LEFT);
 				dateButton[i][j].setVerticalAlignment(SwingConstants.TOP);;
-				setLayout(new GridLayout(0,7,2,2));//그리드 (채우기)
-				//경계
-				TitledBorder lb = new TitledBorder(new LineBorder(Color.darkGray));
-				setBorder(lb);
-				//setBorder(Color.darkGray); 경계...
+				setLayout(new GridLayout(0,7,2,2));
 				setBorder(BorderFactory.createEmptyBorder(10, 20, 40, 20));//상.좌.하.우
 				
-				dateButton[i][j].addActionListener(new /*DateDialog*/CalendarClickListener());
+				dateButton[i][j].addActionListener(new CalendarClickListener());
 			}
 		}
 		//달력 표시
@@ -162,8 +153,7 @@ public class CalendarPane extends JPanel {
 	private void showCal(){
 		for(int i = 0; i < Cal_Height; i++){
 			for(int j = 0; j < Cal_Width; j++){
-				
-				//날짜 색
+				//날짜 숫자 색
 				dateButton[i][j].setFont(new Font("",Font.BOLD, 15));
 				dateButton[i][j].setForeground(Color.darkGray);
 				if(j==0) 
@@ -183,14 +173,6 @@ public class CalendarPane extends JPanel {
 				//없으면 그냥 표시
 				else dateButton[i][j].setText(dates[i][j]+"");
 				
-				//JLabel todayMark = new JLabel("<html><font color=green>*</html>");-> 오늘 표시
-				//dateButton[i][j].removeAll();
-				
-				/*if(month == cal_day.get(Calendar.MONTH) &&	year == cal_day.get(Calendar.YEAR) && dates[i][j] == cal_day.get(Calendar.DAY_OF_MONTH)){
-					//dateButton[i][j].add(todayMark);
-					dateButton[i][j].setToolTipText("Today");
-				}*/
-				
 				//0이면 안보이게 
 				if(dates[i][j] == 0)
 					dateButton[i][j].setVisible(false);
@@ -205,7 +187,9 @@ public class CalendarPane extends JPanel {
 		JLabel s1; 
 		JLabel s2; 
 		JLabel s3; 
-		
+		/*showCalList.add(s1);
+		showCalList.add(s2);
+		showCalList.add(s3);*/
 		schedule = schedules.title;
 		System.out.println("done");
 		//날짜 가져오기 
@@ -228,29 +212,22 @@ public class CalendarPane extends JPanel {
 				
 					System.out.println(row);
 					System.out.println(col);
-					System.out.println(times[row][col]);
-					
-					
+					System.out.println(times[row][col]);					
 					
 					//개수에 따른 달력 색
 					if (numOfSchedule[i][j] >= 1 && numOfSchedule[i][j] <= 2) {// 1~2개 노란색
-						//System.out.println("*****************one");
 						dateButton[i][j].setOpaque(true);
-						dateButton[i][j].setBackground(Color.yellow);
+						dateButton[i][j].setBackground(new Color(180, 199, 231));
 					}
 					if (numOfSchedule[i][j] >= 3 && numOfSchedule[i][j] <= 5) {// 3~5개 주황색
-						//System.out.println("*****************one");
 						dateButton[i][j].setOpaque(true);
-						dateButton[i][j].setBackground(Color.orange);
+						dateButton[i][j].setBackground(new Color(112, 147, 210));
 					}
 					if (numOfSchedule[i][j] >= 6) {// 6~개 빨간색
-						//System.out.println("*****************one");
 						dateButton[i][j].setOpaque(true);
-						dateButton[i][j].setBackground(Color.red);
+						dateButton[i][j].setBackground(new Color(55, 98, 175));
+						dateButton[i][j].setForeground(Color.white);
 					}
-					
-					
-					
 					
 					//버튼에 출력 
 					if (!checkSchedule1[i][j]) {//첫번째 날짜 표시
@@ -268,7 +245,6 @@ public class CalendarPane extends JPanel {
 						dateButton[i][j].add(s3);
 					}
 				}
-				
 			}
 		}
 		
@@ -280,8 +256,7 @@ public class CalendarPane extends JPanel {
 		}
 		
 	}
-	
-	
+
 	//달력 누르면 동작
 	private class CalendarClickListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
@@ -299,61 +274,78 @@ public class CalendarPane extends JPanel {
 	}
 
 
-	public class DateDialog {//extends Jframe
+	public class DateDialog extends JFrame{//
 		String[] list;
 		JButton dateSchedule[];
-		JLabel noInput;
-		private Frame fs = new Frame("Date Schedule");
+		JLabel noInputMessage;
 		private JPanel datePanel;
  		public DateDialog() {
- 			//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
  			int numOfTodo = 0;
  			//프레임
- 			fs.setVisible(true);
- 			fs.addWindowListener(new WindowAdapter() {
+ 			addWindowListener(new WindowAdapter() {
  				public void windowClosing(WindowEvent e) {
- 					fs.setVisible(false);
- 					fs.dispose();
+ 					setVisible(false);
+ 					dispose();
  				}
  			});
- 			fs.setSize(200,200);
- 			fs.setLocation(200,200);
+ 			setSize(200,200);
+ 			setLocation(300,300);
 			datePanel = new JPanel();
-			fs.add(datePanel);
-			datePanel.setLayout(new GridLayout(5,0));
-			
-			//일점버튼
-			//for(int i=0 ; i < Cal_Height ; i++){
-				//for(int j=0 ; j < Cal_Width ; j++){	
+			add(datePanel);
+			datePanel.setBackground(new Color(183, 255, 216));
+			//일점버튼	
 			if(scheduleList[todayNumX][todayNumY].length() > 0) {//스케줄이 있는 경우 표시
 				String getList = scheduleList[todayNumX][todayNumY];//일정 가져오기
 				String[] list = getList.split("@");
 				numOfTodo = list.length;
+	 			setSize(200,numOfTodo*60);
 				System.out.println(numOfTodo);
 				dateSchedule = new JButton[numOfTodo];
 				deleteButton = new JButton[numOfTodo];
-						
+				datePanel.setLayout(new GridLayout(0,2,0,5));
+				
 				if (numOfTodo > 0) {
 					for (int k = 0; k < list.length; k++) {
+						datePanel.setBackground(Color.white);
+						
 						dateSchedule[k] = new JButton (list[k]);//일정버튼
 						scheduleName[k] = list[k];//이름
+						dateSchedule[k].setSize(100,50);
+						dateSchedule[k].setFocusPainted(false);
+						dateSchedule[k].setBorderPainted(false);
+						dateSchedule[k].setBackground(Color.lightGray);
+						Font dateF = new Font("",Font.PLAIN, 13);//폰트
+						dateSchedule[k].setFont(dateF);
+						dateSchedule[k].setForeground(Color.black);
+						dateSchedule[k].setOpaque(true);
 						datePanel.add(dateSchedule[k]);
-							
+						
 						deleteButton[k] = new JButton ("delete");//삭제버튼
+						deleteButton[k].setSize(100,50);
+						deleteButton[k].setFocusPainted(false);
+						deleteButton[k].setBorderPainted(false);
+						deleteButton[k].setBackground(new Color(200, 50, 50));
+						Font delF = new Font("",Font.PLAIN, 13);
+						deleteButton[k].setFont(delF);
+						deleteButton[k].setForeground(Color.white);
+						deleteButton[k].setOpaque(true);
 						datePanel.add(deleteButton[k]);
 						deleteButton[k].addActionListener(new deleteCLickListner());
 					}
 				}
-						
-				//	}//for j	
-			//}//for i
-						
 				setVisible(true);
 			}
 			else {//스케줄이 없는 경우
-				noInput = new JLabel("There is no schedule");
-				noInput.setForeground(Color.darkGray);
-				datePanel.add(noInput);		
+				noInputMessage = new JLabel("<HTML><br>There is no schedule!<br><br>Add new Events HERE<br>using ADD button:)");
+				noInputMessage.setOpaque(true);
+				noInputMessage.setBackground(new Color(183, 255, 216));
+				noInputMessage.setForeground(Color.darkGray);
+				noInputMessage.setHorizontalAlignment(JLabel.CENTER);
+				Font mesF = new Font("",Font.PLAIN, 13);
+				noInputMessage.setFont(mesF);
+				noInputMessage.setForeground(Color.darkGray);
+				noInputMessage.setOpaque(true);
+				datePanel.add(noInputMessage);		
 				setVisible(true);
 			}
  		}
@@ -371,26 +363,17 @@ public class CalendarPane extends JPanel {
 				}
 			}
 			if (result == 0) {//delete file
-
-				//todayNumX,todayNumX 사용
 				//5월자 날자 파일 삭제
 				int day = dates[todayNumX][todayNumY];
-				//System.out.println("name");
-				//System.out.println(idx);
-				//System.out.println(scheduleName[idx]);
 				String deleteFileName ="";
 				for (int j = 0; j <101; j++) {
 					if (times[day][j].length() > 0) {
 						String title = times[day][j].substring(0, times[day][j].indexOf("@"));//일정 명
-						//System.out.println(title);
 						if (title.equals(scheduleName[idx])) {
 							deleteFileName = times[day][j].substring(times[day][j].indexOf("@")+1);//파일 명
-							//System.out.println(deleteFileName);
 						}
 					}
 				}
-				
-				
 				File folder = new File(".");
 				File[] listOfFiles = folder.listFiles();
 
@@ -404,19 +387,29 @@ public class CalendarPane extends JPanel {
 				    	}
 				    	if (extension.equals("json")) {//확장자 json
 				    		if (filename.equals(deleteFileName)) {//파일 명 확인 deleteFileName
-				    			//System.out.println("s2");
 				    			File deleteFile = new File(file.getName());
-				    			deleteFile.delete();//삭제
+				    			deleteFile.delete();
 				    		}
 				    	}
 				    }
 				}
 				
-/*<<<<<<< HEAD
-			
-=======
->>>>>>> 9da79acdd753f54dc70af3cf07022bf865b81c14*/
 			}
+			
 		}
 	}
+
+
+	/*public void removeCalendar() {
+		// TODO Auto-generated method stub
+		for (int i =0; i < Cal_Height; i++) {
+			for (int j = 0; j < Cal_Width; j++) {
+				remove(dateButton[i][j]);
+				this.revalidate();
+				this.repaint();
+				dateButton[i][j].revalidate();
+				dateButton[i][j].repaint();
+			}
+		}
+	}*/
 }

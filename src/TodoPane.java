@@ -15,12 +15,12 @@ public class TodoPane extends JPanel {
 		add(list_title);
 		Font titleF = new Font("",Font.BOLD, 25);
 		list_title.setFont(titleF);
-		list_title.setForeground(Color.lightGray);
+		list_title.setForeground(Color.darkGray);
 		list_title.setOpaque(true);
 		list_title.setBackground(Color.white);
 		
-		setBorder(BorderFactory.createEmptyBorder(0, 20, 40, 20));//상.좌.하.우
-		setLayout(new GridLayout(0,1,0,5));//(행,열, 수평gap, 수직gap
+		setBorder(BorderFactory.createEmptyBorder(0, 0, 20, 20));//상.좌.하.우
+		setLayout(new GridLayout(0,1,0,5));//(행,열, 수평gap, 수직gap)
 		setBackground(Color.white);
 	}
 	
