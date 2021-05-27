@@ -34,6 +34,8 @@ class SchedulerFrame extends JFrame {
     private WeatherPane weatherPane;
     private CalendarController calendarController;
     private String id;
+    FooThread f;
+    JPanel temp;
     
     Socket socket=null;
 	
@@ -46,13 +48,23 @@ class SchedulerFrame extends JFrame {
 			socket=new Socket("localhost",3000);
 			setupComp();
 			setupControllers();
+
+			f = new FooThread(socket, usersPane, calendarController);
+			f.start(); 
+			
+			buttonsPane = new ButtonsPane(socket, id, f);
+			buttonsPane.setPreferredSize(new Dimension(300, 200));
+			temp.add(buttonsPane);
+			getContentPane().add(temp, BorderLayout.EAST);
+			buttonsPane.setCalendarController(calendarController);
+			
+			
 			setTitle("Scheduler");
 			setDefaultCloseOperation(EXIT_ON_CLOSE);
 			setSize(1000, 800);
 			setVisible(true);
-
-			new FooThread(socket,usersPane, this, calendarController).start();
-
+			
+			
 		}catch(IOException ie){
 			System.out.println(ie.getMessage());
 		}
@@ -68,25 +80,25 @@ class SchedulerFrame extends JFrame {
 		weatherPane.setPreferredSize(new Dimension(300, 300));
 
 		usersPane = new UsersPane(socket, id);
-		buttonsPane = new ButtonsPane(socket, id);
+		//buttonsPane = new ButtonsPane(socket, id, f);
 		
 		usersPane.setPreferredSize(new Dimension(1000, 70));
 		todoPane.setPreferredSize(new Dimension(300, 300));
-		buttonsPane.setPreferredSize(new Dimension(300, 200));
+		//buttonsPane.setPreferredSize(new Dimension(300, 200));
 
-		JPanel temp = new JPanel();
+		temp = new JPanel();
 		temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
 		temp.add(todoPane);
 		temp.add(weatherPane);
-		temp.add(buttonsPane);
+		//temp.add(buttonsPane);
 		getContentPane().add(usersPane, BorderLayout.PAGE_START);
 		getContentPane().add(calendarPane, BorderLayout.CENTER);
-		getContentPane().add(temp, BorderLayout.EAST);
+		//getContentPane().add(temp, BorderLayout.EAST);
 	}
 	
 	private void setupControllers() {
 		calendarController = new CalendarController(calendarPane, todoPane, this.id);
-		buttonsPane.setCalendarController(calendarController);
+		//buttonsPane.setCalendarController(calendarController);
 		calendarPane.setController(calendarController);
 	}
 	
@@ -105,15 +117,19 @@ class FooThread extends Thread{
     SchedulerFrame f;
     CalendarController controller;
     AlertFrame alert;
+    ChatFrame chatframe = null;
     
     private Gson gson = new Gson();
     
-    public FooThread(Socket socket, UsersPane usersPane, SchedulerFrame f, CalendarController controller) {
+    public FooThread(Socket socket, UsersPane usersPane, CalendarController controller) {
           this.usersPane = usersPane;
-          this.f = f;
           this.socket=socket;
           this.controller = controller;
-          this.id = f.getID();
+          this.id = usersPane.id;
+    }
+    
+    public void setChatFrame(ChatFrame cf) {
+    	this.chatframe = cf;
     }
 
     public void run() {
@@ -143,7 +159,10 @@ class FooThread extends Thread{
 	    				usersPane.repaint();
 	    			}
 	    			else if (type.equals("chat")) {
-	    				
+	    				if(chatframe != null) {
+	    					chatframe.txtArea.append(result+"\n");
+	    					
+	    				}
 	    			}
 				}
 

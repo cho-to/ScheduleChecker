@@ -28,17 +28,14 @@ class SendStr {
     public void sendMsg() {
           //키보드로부터 읽어오기 위한 스트림객체 생성
           BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-          PrintWriter pw=null;
+          PrintWriter toServer=null;
 
           try{
 
-                 //서버로 문자열 전송하기 위한 스트림객체 생성
-                 pw=new PrintWriter(socket.getOutputStream(),true);
+                 toServer=new PrintWriter(socket.getOutputStream(),true);
                  str= "["+id+"] "+cf.txtField.getText();
-
-                 //입력받은 문자열 서버로 보내기
-
-                 pw.println(str);
+                 toServer.println("chat");
+                 toServer.println(str);
 
           }catch(IOException ie){
                  System.out.println(ie.getMessage());
@@ -53,8 +50,6 @@ class SendStr {
                  }
           }
     }     
-
-    
 }
 
 //서버가 보내온 문자열을 전송받는 스레드
@@ -125,7 +120,8 @@ public class ChatFrame extends JFrame implements ActionListener{
            this.id = id;
            setTitle("Multi-Chat");
            
-           new ReadThread(socket, this).start();
+           
+           //new ReadThread(socket, this).start();
            wt = new SendStr(this);
                           
            add("Center", txtArea);

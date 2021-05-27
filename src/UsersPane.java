@@ -21,7 +21,7 @@ public class UsersPane extends JPanel {
 	
 	private JPanel welcomePanel, connectPanel, UserPanel;
 	private JLabel welcomeLabel, connectLabel, UserLabel;
-	private String id;
+	String id;
 	String ip;
 	String result;
 	Socket socket;

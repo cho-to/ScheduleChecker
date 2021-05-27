@@ -19,15 +19,18 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	JButton addEventButton;
 	JButton appoinmentButton;
 	JButton chatButton;
+	ChatFrame chatframe;
 	Socket socket;
 	String id;
+	FooThread f;
 	private CalendarController calendarController;
 	
-	ButtonsPane(Socket socket, String id) {
+	ButtonsPane(Socket socket, String id, FooThread f) {
 		setBackground(Color.white);
 		//아이콘도 추가하면 좋을 듯 
 		this.socket = socket;
 		this.id = id;
+		this.f = f;
 		addEventButton = new JButton("add events");
 		appoinmentButton = new JButton("make impromptu appointment");
 		chatButton = new JButton("chatting");
@@ -58,7 +61,8 @@ public class ButtonsPane extends JPanel implements ActionListener {
         	new NewScheduleDialog(calendarController, false, socket);
         } 
         else if(e.getSource() == chatButton) {
-        	new ChatFrame(socket, id);
+        	chatframe = new ChatFrame(socket, id);
+        	f.setChatFrame(chatframe);
         }
         else if(e.getSource() == appoinmentButton) {
         	new NewScheduleDialog(calendarController, true, socket);

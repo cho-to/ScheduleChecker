@@ -70,6 +70,10 @@ class EchoThread extends Thread{
                         		System.out.println("server : light!!!");
                         		str=fromClient.readLine();
                         		sendSchedule(str);
+                        	} else if (type.equals("chat")) {
+                        		str = fromClient.readLine();
+                        		sendMsg(str);
+                        		
                         	}
 
                     	}
@@ -100,7 +104,7 @@ class EchoThread extends Thread{
                     	   //메세지 보낸 socket은 제외
                            if(socket != this.socket){
                                  PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
-                                 toClient.println("user");
+                                 toClient.println("chat");
                                  toClient.println(str);
                                  toClient.flush();
                                  //여기서 소켓 바로 닫으면 걍 다른애들 꺼짐..
