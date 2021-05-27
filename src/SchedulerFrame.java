@@ -60,7 +60,7 @@ class SchedulerFrame extends JFrame {
 	}
 	
 	private void setupComp() throws IOException{
-		calendarPane = new CalendarPane();
+		calendarPane = new CalendarPane(id);
 		todoPane = new TodoPane();
 		weatherPane = new WeatherPane();
 		weatherPane.setPreferredSize(new Dimension(300, 300));
@@ -85,6 +85,7 @@ class SchedulerFrame extends JFrame {
 	private void setupControllers() {
 		calendarController = new CalendarController(calendarPane, todoPane, this.id);
 		buttonsPane.setCalendarController(calendarController);
+		calendarPane.setController(calendarController);
 	}
 	
 	
