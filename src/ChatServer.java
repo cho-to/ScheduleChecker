@@ -114,13 +114,9 @@ class EchoThread extends Thread{
        public void sendSchedule(String str){
            try{
                   for(Socket socket:socketList){
-                  	   //메세지 보낸 socket은 제외
-//                         if(socket != this.socket){
-//                               //여기서 소켓 바로 닫으면 걍 다른애들 꺼짐..
-//                         }
                       PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
                       System.out.println("server sending " + str);
-                      toClient.println("lightning");
+                      toClient.println("lightning@" + id);
                       toClient.println(str);
                       toClient.flush();
 

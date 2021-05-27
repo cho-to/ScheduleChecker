@@ -90,6 +90,9 @@ class SchedulerFrame extends JFrame {
 		calendarPane.setController(calendarController);
 	}
 	
+	public String getID() {
+		return id;
+	}
 	
 }
 
@@ -101,6 +104,8 @@ class FooThread extends Thread{
     String id;
     SchedulerFrame f;
     CalendarController controller;
+    AlertFrame alert;
+    
     private Gson gson = new Gson();
     
     public FooThread(Socket socket, UsersPane usersPane, SchedulerFrame f, CalendarController controller) {
@@ -108,6 +113,7 @@ class FooThread extends Thread{
           this.f = f;
           this.socket=socket;
           this.controller = controller;
+          this.id = f.getID();
     }
 
     public void run() {
@@ -118,21 +124,26 @@ class FooThread extends Thread{
 				String type = fromServer.readLine();
 				String result = fromServer.readLine();
 				if (type != null) {
-	    			if (type.equals("lightning")) {
+	    			if (type.contains("lightning")) {
 	    				System.out.println("received text : " +result);
+	    				String strArray[] = type.split("@");
+	    				String sendID = strArray[1];
+	    				
 	    				ScheduleModel receivedSchedule = gson.fromJson(result, ScheduleModel.class);
 	    				controller.addNewScheudle(receivedSchedule);
+	    				if(!sendID.equals(id)) {
+	    				alert = new AlertFrame(sendID, receivedSchedule.title);
+	    				}
 	    			}
 	    			else if (type.equals("user")) {
 	    				System.out.println("user changed");
 	    				usersPane.removeAll();
-	    				System.out.println(result);
-	    				
 	    				usersPane.redrawUser(result);
-	    				
-	    				
 	    				usersPane.revalidate();
 	    				usersPane.repaint();
+	    			}
+	    			else if (type.equals("chat")) {
+	    				
 	    			}
 				}
 
