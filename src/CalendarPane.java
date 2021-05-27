@@ -11,6 +11,7 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -47,10 +48,12 @@ public class CalendarPane extends JPanel {
 	String times[][] = new String[32][101];//시간[날짜][numOfSchedule]
 	int todayNumX = 0, todayNumY = 0; //열러는 날짜의 인덱스
 	String schedule; String[] scheduleName = new String[101];
-
+	private String id;
+	private CalendarController controller;
 	//calendar gui 구현
-	CalendarPane() {
+	CalendarPane(String id) {
 		setBackground(Color.white);
+		this.id = id;		
 		//요일
 		for (int i =0; i< Cal_Width; i++) {
 			dayName[i]=new JButton(day_string_name[i]);
@@ -70,6 +73,12 @@ public class CalendarPane extends JPanel {
 				dayName[i].setForeground(new Color(150, 150, 150));
 		}
 		
+		makeDateButtons();
+		
+		//달력 표시
+	}
+	
+	void makeDateButtons() {
 		//날짜
 		for (int i =0; i < Cal_Height; i++) {
 			for (int j = 0; j < Cal_Width; j++) {
@@ -88,9 +97,9 @@ public class CalendarPane extends JPanel {
 				dateButton[i][j].addActionListener(new CalendarClickListener());
 			}
 		}
-		//달력 표시
 		initCal(cal_day);
 		showCal();
+
 	}
 	
 	//달력 만들기
@@ -257,6 +266,14 @@ public class CalendarPane extends JPanel {
 		
 	}
 
+	void removeButtons() {
+		for (int i =0; i < Cal_Height; i++) {
+			for (int j = 0; j < Cal_Width; j++) {
+			    remove(dateButton[i][j]);  
+			}
+		}
+	}
+
 	//달력 누르면 동작
 	private class CalendarClickListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
@@ -374,42 +391,37 @@ public class CalendarPane extends JPanel {
 						}
 					}
 				}
-				File folder = new File(".");
-				File[] listOfFiles = folder.listFiles();
 
+				File folder = new File(id);
+				File[] listOfFiles = folder.listFiles();
 				for (File file : listOfFiles) {
-				    if (file.isFile()) {
-				    	String filename = "", extension = "";
-				    	int i = file.getName().lastIndexOf('.');
-				    	if (i > 0) {
-				    	    filename = file.getName().substring(0,i);
-				    	    extension = file.getName().substring(i+1);
-				    	}
-				    	if (extension.equals("json")) {//확장자 json
-				    		if (filename.equals(deleteFileName)) {//파일 명 확인 deleteFileName
-				    			File deleteFile = new File(file.getName());
-				    			deleteFile.delete();
-				    		}
-				    	}
-				    }
+					if (file.isFile()) {
+						String filename = "", extension = "";
+						int i = file.getName().lastIndexOf('.');
+						if (i > 0) {
+							filename = file.getName().substring(0, i);
+							extension = file.getName().substring(i + 1);
+						}
+						if (extension.equals("json")) {// 확장자 json
+							if (filename.equals(deleteFileName)) {// 파일 명 확인 deleteFileName
+								File deleteFile = new File(file.getAbsolutePath());
+								deleteFile.delete();// 삭제
+							}
+						}
+					}
+				   
 				}
-				
+
+					
+				}
+				controller.refresh();
 			}
-			
-		}
+
 	}
 
 
-	/*public void removeCalendar() {
-		// TODO Auto-generated method stub
-		for (int i =0; i < Cal_Height; i++) {
-			for (int j = 0; j < Cal_Width; j++) {
-				remove(dateButton[i][j]);
-				this.revalidate();
-				this.repaint();
-				dateButton[i][j].revalidate();
-				dateButton[i][j].repaint();
-			}
-		}
-	}*/
+	
+	public void setController(CalendarController controller) {
+		this.controller = controller;
+	}
 }

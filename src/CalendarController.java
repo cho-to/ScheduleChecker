@@ -71,18 +71,25 @@ public class CalendarController {
 	public void addNewScheudle(ScheduleModel schedule) {
 		try {
 			writeNewSchedule(schedule);
-			todoPane.removeButtons();//remove contents before refresh
-			// TODO: calendarPane도 remove해줘야할거가탕요!
-			
-			readFiles();
-			configureTodo();
-			todoPane.revalidate();
-			todoPane.repaint();
+			refresh();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
+	
+	public void refresh() {
+		todoPane.removeButtons();
+		calendarPane.removeButtons();
+		calendarPane.makeDateButtons();
+		readFiles();
+		configureTodo();
+		configureDate();
+		todoPane.revalidate();
+		todoPane.repaint();
+		calendarPane.revalidate();
+		calendarPane.repaint();
+	}
 	
 	private void writeNewSchedule(ScheduleModel schedule) throws IOException {
 		String json = gson.toJson(schedule);
@@ -90,8 +97,6 @@ public class CalendarController {
 		//자신의 폴더에 저장해야한다!
 	    Files.write(Paths.get(id,schedule.id + ".json"), json.getBytes());
 	}
-
-
 
 	private void configureTodo() {
 		//TODO:占쏙옙占싸울옙 占쏙옙占쏙옙占쏙옙 占쌩곤옙占쌀띰옙占쏙옙 refresh占쌔억옙!

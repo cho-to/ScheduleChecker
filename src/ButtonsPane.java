@@ -5,6 +5,10 @@ import java.awt.Image;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.Socket;
 
 import javax.swing.BorderFactory;
@@ -26,10 +30,9 @@ public class ButtonsPane extends JPanel implements ActionListener {
 		this.socket = socket;
 		this.id = id;
 		setBackground(Color.white);
-		//아이콘도 추가하면 좋을 듯 
 		ImageIcon event = new ImageIcon(("./icon/calendar.png"));//기본 이미지
-		ImageIcon alarm = new ImageIcon(("./icon/alarm.png"));//기본 이미지
-		ImageIcon chat = new ImageIcon(("./icon/chat.png"));//기본 이미지
+		ImageIcon alarm = new ImageIcon(("./icon/alarm.png"));
+		ImageIcon chat = new ImageIcon(("./icon/chat.png"));
 		Image imgE = event.getImage();
 		Image imgA = alarm.getImage();
 		Image imgC = chat.getImage();
@@ -55,7 +58,8 @@ public class ButtonsPane extends JPanel implements ActionListener {
 		appoinmentButton.setForeground(Color.darkGray);
 		chatButton.setFont(buttonF);
 		chatButton.setForeground(Color.darkGray);
-		
+		appoinmentButton.addActionListener(this);
+
 		addEventButton.setOpaque(true);
 		appoinmentButton.setOpaque(true);
 		chatButton.setOpaque(true);
@@ -75,10 +79,14 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addEventButton) {
-        	new NewScheduleDialog(calendarController);
+        	new NewScheduleDialog(calendarController, false, socket);
         } 
         else if(e.getSource() == chatButton) {
         	new ChatFrame(socket, id);
         }
+        else if(e.getSource() == appoinmentButton) {
+        	new NewScheduleDialog(calendarController, true, socket);
+        }
+
 	}
 }

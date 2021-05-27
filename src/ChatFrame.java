@@ -34,16 +34,7 @@ class SendStr {
 
                  //서버로 문자열 전송하기 위한 스트림객체 생성
                  pw=new PrintWriter(socket.getOutputStream(),true);
-               
-                 if(cf.isFirst==true){                       
-                        str = "["+id+"] "+cf.txtField.getText();
-                        cf.isFirst = false;
-
-                 }else{
-
-                        str= "["+id+"] "+cf.txtField.getText();
-
-                 }
+                 str= "["+id+"] "+cf.txtField.getText();
 
                  //입력받은 문자열 서버로 보내기
 
