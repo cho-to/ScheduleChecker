@@ -22,6 +22,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import com.google.gson.Gson;
+
 
 class SchedulerFrame extends JFrame {
 
@@ -37,22 +39,22 @@ class SchedulerFrame extends JFrame {
 	
 	SchedulerFrame(String id) throws IOException {
 		this.id = id;
-		
+
 		try{
-			
-//         socket=new Socket("192.168.0.40",3000);
-         socket=new Socket("localhost",3000);
- 		setupComp();
- 		setupControllers();
- 		setTitle("Scheduler");
- 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-       	setSize(1000, 800);
- 		setVisible(true);
- 		
-         new FooThread(socket, this).start();
+
+			//         socket=new Socket("192.168.0.40",3000);
+			socket=new Socket("localhost",3000);
+			setupComp();
+			setupControllers();
+			setTitle("Scheduler");
+			setDefaultCloseOperation(EXIT_ON_CLOSE);
+			setSize(1000, 800);
+			setVisible(true);
+
+			new FooThread(socket, this, calendarController).start();
 
 		}catch(IOException ie){
-            System.out.println(ie.getMessage());
+			System.out.println(ie.getMessage());
 		}
 		
 		
@@ -95,11 +97,14 @@ class FooThread extends Thread{
 
     Socket socket;
     SchedulerFrame f;
+    CalendarController controller;
     String id;
-    
-    public FooThread(Socket socket, SchedulerFrame f) {
+	private Gson gson = new Gson();
+
+    public FooThread(Socket socket, SchedulerFrame f, CalendarController controller) {
           this.f = f;
           this.socket=socket;
+          this.controller = controller;
     }
 
     public void run() {
@@ -111,7 +116,9 @@ class FooThread extends Thread{
 				String result = fromServer.readLine();
 				if (type != null) {
 	    			if (type.equals("lightning")) {
-	    				
+	    				System.out.println("received text : " +result);
+	    				ScheduleModel receivedSchedule = gson.fromJson(result, ScheduleModel.class);
+	    				controller.addNewScheudle(receivedSchedule);
 	    			}
 				}
 

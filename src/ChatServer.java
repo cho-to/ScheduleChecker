@@ -66,7 +66,7 @@ class EchoThread extends Thread{
                         	} else if (type.equals("lightning")) {
                         		System.out.println("server : light!!!");
                         		str=fromClient.readLine();
-                        		sendSchedule("hello light");
+                        		sendSchedule(str);
                         	}
                     	}
                     }                 
@@ -114,6 +114,7 @@ class EchoThread extends Thread{
 //                               //¿©±â¼­ ¼ÒÄÏ ¹Ù·Î ´ÝÀ¸¸é °Á ´Ù¸¥¾Öµé ²¨Áü..
 //                         }
                       PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
+                      System.out.println("server sending " + str);
                       toClient.println("lightning");
                       toClient.println(str);
                       toClient.flush();

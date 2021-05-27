@@ -55,27 +55,13 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
         if (e.getSource() == addEventButton) {
-        	new NewScheduleDialog(calendarController);
+        	new NewScheduleDialog(calendarController, false, socket);
         } 
         else if(e.getSource() == chatButton) {
         	new ChatFrame(socket, id);
         }
         else if(e.getSource() == appoinmentButton) {
-        	BufferedReader fromServer = null;
-        	PrintWriter toServer = null;
-
-    		try {
-				fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-	    		toServer = new PrintWriter(socket.getOutputStream(), true);
-	    		toServer.println("lightning");
-	    		toServer.println(id);//나중에 바꾸
-	    		toServer.flush();
-
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
+        	new NewScheduleDialog(calendarController, true, socket);
         }
 
 	}
