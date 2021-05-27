@@ -34,7 +34,7 @@ class SchedulerFrame extends JFrame {
     private WeatherPane weatherPane;
     private CalendarController calendarController;
     private String id;
-    FooThread f;
+    SchedulerThread f;
     JPanel temp;
     
     Socket socket=null;
@@ -49,7 +49,7 @@ class SchedulerFrame extends JFrame {
 			setupComp();
 			setupControllers();
 
-			f = new FooThread(socket, usersPane, calendarController);
+			f = new SchedulerThread(socket, usersPane, calendarController);
 			f.start(); 
 			
 			buttonsPane = new ButtonsPane(socket, id, f);
@@ -108,7 +108,7 @@ class SchedulerFrame extends JFrame {
 	
 }
 
-class FooThread extends Thread{
+class SchedulerThread extends Thread{
 
     Socket socket;
 
@@ -121,7 +121,7 @@ class FooThread extends Thread{
     
     private Gson gson = new Gson();
     
-    public FooThread(Socket socket, UsersPane usersPane, CalendarController controller) {
+    public SchedulerThread(Socket socket, UsersPane usersPane, CalendarController controller) {
           this.usersPane = usersPane;
           this.socket=socket;
           this.controller = controller;

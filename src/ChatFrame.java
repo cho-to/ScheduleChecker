@@ -52,48 +52,6 @@ class SendStr {
     }     
 }
 
-//서버가 보내온 문자열을 전송받는 스레드
-
-class ReadThread extends Thread{
-
-    Socket socket;
-    ChatFrame cf;
-    String id;
-    
-    public ReadThread(Socket socket, ChatFrame cf) {
-          this.cf = cf;
-          this.socket=socket;
-          this.id = cf.id;
-    }
-
-    public void run() {
-          BufferedReader fromServer=null;
-          try{
-                 fromServer=new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                 while(true){
-                        String str=fromServer.readLine();
-                        if(str==null){
-                              System.out.println("접속이 끊겼음");
-                              break;
-                        }
-                        cf.txtArea.append(str+"\n");
-                 }
-
-          }catch(IOException ie){
-                 System.out.println(ie.getMessage());
-          }finally{
-
-                 try{
-                        if(fromServer!=null) fromServer.close();
-                        //if(socket!=null) socket.close();
-                 }catch(IOException ie){}
-
-          }
-
-    }
-
-}
-
 
 
 public class ChatFrame extends JFrame implements ActionListener{

@@ -25,10 +25,10 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	ChatFrame chatframe;
 	Socket socket;
 	String id;
-	FooThread f;
+	SchedulerThread f;
 	private CalendarController calendarController;
 	
-	ButtonsPane(Socket socket, String id, FooThread f) {
+	ButtonsPane(Socket socket, String id, SchedulerThread f) {
 		setBackground(Color.white);
 		//아이콘도 추가하면 좋을 듯 
 		this.socket = socket;

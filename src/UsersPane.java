@@ -70,18 +70,6 @@ public class UsersPane extends JPanel {
 		
 		
 		
-		//UserPanel = new JPanel();
-		/*
-		
-		UserPanel.add(UserLabel);
-		welcomePanel.setPreferredSize(new Dimension(1000, 10));
-		connectPanel.setPreferredSize(new Dimension(1000, 10));
-		UserPanel.setPreferredSize(new Dimension(1000, 30));
-		add(welcomePanel, BorderLayout.NORTH);
-		add(connectPanel);
-		add(UserPanel, BorderLayout.SOUTH);
-		*/
-		
 		add(welcomeLabel);
 		add(connectLabel);
 		add(UserLabel);
