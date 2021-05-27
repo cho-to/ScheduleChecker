@@ -22,6 +22,8 @@ public class UsersPane extends JPanel {
 	private JPanel welcomePanel, connectPanel, UserPanel;
 	private JLabel welcomeLabel, connectLabel, UserLabel;
 	private String id;
+	String ip;
+	String result;
 	Socket socket;
 	
 	UsersPane(Socket s, String id) throws IOException{
@@ -42,7 +44,7 @@ public class UsersPane extends JPanel {
 		//welcomePanel.add(welcomeLabel, BorderLayout.NORTH);
 		
 		InetAddress iaddr=socket.getLocalAddress();                      
-        String ip = iaddr.getHostAddress();
+        ip = iaddr.getHostAddress();
 		connectLabel = new JLabel("Your ip number is... " + ip );
 		//connectPanel = new JPanel();
 		
@@ -58,7 +60,7 @@ public class UsersPane extends JPanel {
 		toServer.flush();
 		
 		String type = fromServer.readLine();
-		String result = fromServer.readLine();
+		result = fromServer.readLine();
 
 		if (type.equals("user")) {
 			UserLabel = new JLabel("Online Users : " + result);
@@ -86,6 +88,31 @@ public class UsersPane extends JPanel {
 		
 		setBackground(Color.white);
 	}
+	
+	public void redrawUser(String str) {
+		welcomeLabel = new JLabel("Welcome [" + id + "] !");
+		
+		Font welcomeF = new Font("", Font.BOLD, 20);
+		welcomeLabel.setFont(welcomeF);
+		welcomeLabel.setForeground(Color.DARK_GRAY);
+		welcomeLabel.setOpaque(true);
+		welcomeLabel.setBackground(Color.white);
+		welcomeLabel.setBounds(500, 20, 1000, 20);
+		
+		
+		connectLabel = new JLabel("Your ip number is... " + ip );
+	
+		UserLabel = new JLabel("Online Users : " + str);
+	
+
+		add(welcomeLabel);
+		add(connectLabel);
+		add(UserLabel);
+		
+		setBackground(Color.white);
+		
+	}
+	
 	
 	
 	

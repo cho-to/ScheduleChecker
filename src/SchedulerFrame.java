@@ -49,7 +49,7 @@ class SchedulerFrame extends JFrame {
        	setSize(1000, 800);
  		setVisible(true);
  		
-         new FooThread(socket, this).start();
+        new FooThread(socket, usersPane).start();
 
 		}catch(IOException ie){
             System.out.println(ie.getMessage());
@@ -93,11 +93,11 @@ class SchedulerFrame extends JFrame {
 class FooThread extends Thread{
 
     Socket socket;
-    SchedulerFrame f;
+    UsersPane usersPane;
     String id;
     
-    public FooThread(Socket socket, SchedulerFrame f) {
-          this.f = f;
+    public FooThread(Socket socket, UsersPane usersPane) {
+          this.usersPane = usersPane;
           this.socket=socket;
     }
 
@@ -111,6 +111,17 @@ class FooThread extends Thread{
 				if (type != null) {
 	    			if (type.equals("lightning")) {
 	    				
+	    			}
+	    			else if (type.equals("user")) {
+	    				System.out.println("user changed");
+	    				usersPane.removeAll();
+	    				System.out.println(result);
+	    				
+	    				usersPane.redrawUser(result);
+	    				
+	    				
+	    				usersPane.revalidate();
+	    				usersPane.repaint();
 	    			}
 				}
 

@@ -33,7 +33,7 @@ class EchoThread extends Thread{
                     while(true){
 
                     	String type = fromClient.readLine();
-                    	System.out.println(type);
+                    	
                     	if (type != null) {
                     		if (type.equals("user")) {
                         		if(isFirst) {
@@ -42,7 +42,7 @@ class EchoThread extends Thread{
                             		id = str;
                             		
                             		nameList.add(str);
-                           
+                            		
                             		String result = "" ;
                             		for(String name : nameList) {
                             			result += name + ", ";
@@ -50,6 +50,8 @@ class EchoThread extends Thread{
                             		toClient.println("user");
                             		toClient.println(result);
                             		toClient.flush();
+                            		
+                            		sendUser();
                             		
                             		isFirst = false;
                             	}else {
@@ -77,6 +79,7 @@ class EchoThread extends Thread{
             	 	//접속이 끊어질 때
             	 	socketList.remove(socket);
             	 	nameList.remove(id);
+            	 	sendUser();
                     System.out.println(ie.getMessage());
              }
              finally{
@@ -125,7 +128,28 @@ class EchoThread extends Thread{
                   System.out.println(ie.getMessage());
            }
      }
-
+       
+       
+     public void sendUser() {
+    	 try{
+             for(Socket socket:socketList){
+             	   //메세지 보낸 socket은 제외
+                    if(socket != this.socket){
+                          PrintWriter toClient = new PrintWriter(socket.getOutputStream(), true);
+                          toClient.println("user");
+                          String userStr = "" ;
+                  		  for(String name : nameList) {
+                  			userStr += name + ", ";
+                  		  }
+                          toClient.println(userStr);
+                          toClient.flush();
+                          //여기서 소켓 바로 닫으면 걍 다른애들 꺼짐..
+                    }
+             }
+      }catch(IOException ie){
+             System.out.println(ie.getMessage());
+      }
+     }
        
        
 }
