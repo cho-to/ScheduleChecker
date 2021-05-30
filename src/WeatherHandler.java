@@ -43,9 +43,6 @@ public class WeatherHandler {
 			    	weathers.add(temp[i].weather[0]);
 		    	}
 			    
-			    //test¿ë
-			    weathers.forEach(item -> System.out.println(item.description));
-			    
 			    return weathers;
 	        }
 	    } catch(IOException e) {

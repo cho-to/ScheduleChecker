@@ -31,11 +31,10 @@ class SendStr {
           PrintWriter toServer=null;
 
           try{
-
-                 toServer=new PrintWriter(socket.getOutputStream(),true);
-                 str= "["+id+"] "+cf.txtField.getText();
-                 toServer.println("chat");
-                 toServer.println(str);
+             toServer=new PrintWriter(socket.getOutputStream(),true);
+             str= "["+id+"] "+cf.txtField.getText();
+             toServer.println("chat");
+             toServer.println(str);
 
           }catch(IOException ie){
                  System.out.println(ie.getMessage());

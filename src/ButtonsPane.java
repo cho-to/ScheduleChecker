@@ -29,13 +29,14 @@ public class ButtonsPane extends JPanel implements ActionListener {
 	private CalendarController calendarController;
 	
 	ButtonsPane(Socket socket, String id, SchedulerThread f) {
-		setBackground(Color.white);
-		//아이콘도 추가하면 좋을 듯 
 		this.socket = socket;
 		this.id = id;
 		this.f = f;
-		
-		
+		setupUI();
+	}
+	
+	//UI 그리는데 필요한 코드
+	private void setupUI() {
 		ImageIcon event = new ImageIcon(("src/icon/calendar.png"));//기본 이미지
 		ImageIcon alarm = new ImageIcon(("src/icon/alarm.png"));
 		ImageIcon chat = new ImageIcon(("src/icon/chat.png"));
@@ -75,6 +76,7 @@ public class ButtonsPane extends JPanel implements ActionListener {
 		appoinmentButton.setBackground(Color.white);
 		chatButton.setBackground(Color.white);
 		
+		setBackground(Color.white);
 		setLayout(new GridLayout(0,1,2,2));
 		setBorder(BorderFactory.createEmptyBorder(0, 0, 40, 20));//상.좌.하.우
 	}

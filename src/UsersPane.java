@@ -41,20 +41,12 @@ public class UsersPane extends JPanel {
 		welcomeLabel.setBackground(Color.white);
 		welcomeLabel.setBounds(500, 20, 1000, 20);
 		
-		//welcomePanel.add(welcomeLabel, BorderLayout.NORTH);
-		
 		InetAddress iaddr=socket.getLocalAddress();                      
         ip = iaddr.getHostAddress();
 		connectLabel = new JLabel("Your ip number is... " + ip );
-		//connectPanel = new JPanel();
-		
-		
-		//connectPanel.add(connectLabel);
-		
-		
+
 		fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		toServer = new PrintWriter(socket.getOutputStream(), true);
-		
 		toServer.println("user");
 		toServer.println(id);
 		toServer.flush();
@@ -65,10 +57,6 @@ public class UsersPane extends JPanel {
 		if (type.equals("user")) {
 			UserLabel = new JLabel("Online Users : " + result);
 		}
-
-		
-		
-		
 		
 		add(welcomeLabel);
 		add(connectLabel);
@@ -86,17 +74,12 @@ public class UsersPane extends JPanel {
 		welcomeLabel.setOpaque(true);
 		welcomeLabel.setBackground(Color.white);
 		welcomeLabel.setBounds(500, 20, 1000, 20);
-		
-		
 		connectLabel = new JLabel("Your ip number is... " + ip );
-	
 		UserLabel = new JLabel("Online Users : " + str);
-	
-
+		
 		add(welcomeLabel);
 		add(connectLabel);
 		add(UserLabel);
-		
 		setBackground(Color.white);
 		
 	}

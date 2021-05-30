@@ -38,7 +38,7 @@ class AlertFrame extends JFrame implements ActionListener{
 			setSize(350, 150);
 			setVisible(true);
 		}
-		
+		//UI 그리는데 필요한 코드
 		private void setupComp(String id, String str) {
 			setLayout(new BorderLayout());
 			p1 = new JPanel();
@@ -51,7 +51,6 @@ class AlertFrame extends JFrame implements ActionListener{
 	        detailLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 	        detailLabel.setHorizontalAlignment(JLabel.CENTER);
 	        
-	        
 	        OkButton = new JButton("OK");
 	        OkButton.addActionListener(this);
 	        
@@ -59,11 +58,9 @@ class AlertFrame extends JFrame implements ActionListener{
 	        p2.add(detailLabel);
 	        p3.add(OkButton);
 	        
-	       
 	        add(p1, BorderLayout.NORTH);
 	        add(p2, BorderLayout.CENTER);
 	        add(p3, BorderLayout.SOUTH);
-
 		}
 		
 		

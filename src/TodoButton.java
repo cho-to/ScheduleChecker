@@ -19,6 +19,7 @@ public class TodoButton extends JButton {
 		setLayout(new GridLayout(1,0,0,5));
 	}
 
+	//일정을 화면상으로 보여주기
 	void configure(ScheduleModel schedule) {
 		System.out.println(schedule.dateString);
 		System.out.println(schedule.id);
@@ -29,6 +30,5 @@ public class TodoButton extends JButton {
 		titleLabel.setForeground(Color.white);
 		add(dateLabel);
 		add(titleLabel);
-//		setLayout(new FlowLayout());
 	}
 }

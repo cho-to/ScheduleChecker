@@ -19,6 +19,7 @@ public class ScheduleModel {
 		this.memo = memo;
 	}
 
+	//날짜 계산을 할수 있도록 Date 타입으로 바꿔주는 함수
 	public Date getDateInDateType() {
 		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH-mm");
 		Date date;

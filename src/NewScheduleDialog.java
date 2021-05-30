@@ -23,7 +23,6 @@ import com.google.gson.stream.JsonReader;
 
 public class NewScheduleDialog extends JDialog implements ActionListener {
     private JPanel panel1, panel2;
-    private JLabel label;
     private JButton okayButton;
     private JButton cancelButton;
     private CalendarController calendarController;
@@ -40,9 +39,8 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
     	this.socket = socket;
     }
     
-    
+	//UI 그리는데 필요한 코드
     private void setComp() {
-    	
         panel1 = new JPanel();
         panel1.setLayout(new BoxLayout(panel1, BoxLayout.Y_AXIS));   
         add(panel1);
@@ -78,6 +76,7 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
         	
     }
     
+    //판넬에 label과 TextField 묶음을 추가하기
 	private void addTextfield(String text, JTextField textField, Container container) {
 		JLabel tempText = new JLabel(text);
 		tempText.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -86,32 +85,34 @@ public class NewScheduleDialog extends JDialog implements ActionListener {
 		textField.setAlignmentX(Component.CENTER_ALIGNMENT);
 		container.add(textField);
 	}
-	
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == okayButton) {
-        	ScheduleModel newSchedule = new ScheduleModel(dateTextField.getText(), timeTextField.getText(), titleTextField.getText(), memoTextField.getText());
-        	if (!this.isLightning) {
-            	calendarController.addNewScheudle(newSchedule);
-        	} else {
-            	BufferedReader fromServer = null;
-            	PrintWriter toServer = null;
-        		String json = gson.toJson(newSchedule);
-        		System.out.println("client sending json :" + json);
-        		try {
-    				fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    	    		toServer = new PrintWriter(socket.getOutputStream(), true);
-    	    		toServer.println("lightning");
-    	    		toServer.println(json);//새롭게 입력받은일정을 json파일로변환해서 보내준다
-    	    		toServer.flush();
-    			} catch (IOException e1) {
-    				// TODO Auto-generated catch block
-    				e1.printStackTrace();
-    			}
+		if (e.getSource() == okayButton) {
+			ScheduleModel newSchedule = new ScheduleModel(dateTextField.getText(), timeTextField.getText(), titleTextField.getText(), memoTextField.getText());
+			if (!this.isLightning) {
+				//local에 새로운 일정 추가하기
+				calendarController.addNewScheudle(newSchedule);
+			} else {
+				//네트워크 통신으로 새로운 일정 추가하기
+				BufferedReader fromServer = null;
+				PrintWriter toServer = null;
+				String json = gson.toJson(newSchedule);
+				System.out.println("client sending json :" + json);
+				try {
+					fromServer = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+					toServer = new PrintWriter(socket.getOutputStream(), true);
+					toServer.println("lightning");
+					toServer.println(json);//새롭게 입력받은일정을 json파일로변환해서 보내준다
+					toServer.flush();
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 
-        	}
-        }else if (e.getSource() == cancelButton) {
-        }
-        dispose(); 
+			}
+		}else if (e.getSource() == cancelButton) {
+		}
+		dispose(); 
 	}
 }

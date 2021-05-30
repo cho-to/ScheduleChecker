@@ -74,8 +74,6 @@ public class CalendarPane extends JPanel {
 		}
 		
 		makeDateButtons();
-		
-		//달력 표시
 	}
 	
 	void makeDateButtons() {
@@ -258,6 +256,7 @@ public class CalendarPane extends JPanel {
 		}
 		
 	}
+	
 	void showSchedule (List<ScheduleModel> schedules) {//스케줄 열람
 		for(int k = 0; k < schedules.size(); k++) {
 			getSchedule(schedules.get(k));
@@ -266,6 +265,7 @@ public class CalendarPane extends JPanel {
 		
 	}
 
+	//refresh 위한 dirty ui를 지워주자
 	void removeButtons() {
 		for (int i =0; i < Cal_Height; i++) {
 			for (int j = 0; j < Cal_Width; j++) {
@@ -391,7 +391,7 @@ public class CalendarPane extends JPanel {
 						}
 					}
 				}
-
+				//해당 id 폴더에 접근후 파일 지우기
 				File folder = new File(id);
 				File[] listOfFiles = folder.listFiles();
 				for (File file : listOfFiles) {
@@ -409,18 +409,15 @@ public class CalendarPane extends JPanel {
 							}
 						}
 					}
-				   
-				}
 
-					
 				}
-				controller.refresh();
 			}
+			controller.refresh();
+		}
 
 	}
 
-
-	
+	//controller 설정하기
 	public void setController(CalendarController controller) {
 		this.controller = controller;
 	}

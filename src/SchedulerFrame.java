@@ -36,27 +36,18 @@ class SchedulerFrame extends JFrame {
     private String id;
     SchedulerThread f;
     JPanel temp;
-    
     Socket socket=null;
 	
 	SchedulerFrame(String id) throws IOException {
 		this.id = id;
 
 		try{
-
-			//socket=new Socket("192.168.0.40",3000);
 			socket=new Socket("localhost",3000);
 			setupComp();
 			setupControllers();
 
 			f = new SchedulerThread(socket, usersPane, calendarController);
 			f.start(); 
-			
-			buttonsPane = new ButtonsPane(socket, id, f);
-			buttonsPane.setPreferredSize(new Dimension(300, 200));
-			temp.add(buttonsPane);
-			getContentPane().add(temp, BorderLayout.EAST);
-			buttonsPane.setCalendarController(calendarController);
 			
 			
 			setTitle("Scheduler");
@@ -68,11 +59,10 @@ class SchedulerFrame extends JFrame {
 		}catch(IOException ie){
 			System.out.println(ie.getMessage());
 		}
-		
-		
 
 	}
 	
+	//UI 그리는데 필요한 코드
 	private void setupComp() throws IOException{
 		calendarPane = new CalendarPane(id);
 		todoPane = new TodoPane();
@@ -80,25 +70,26 @@ class SchedulerFrame extends JFrame {
 		weatherPane.setPreferredSize(new Dimension(300, 300));
 
 		usersPane = new UsersPane(socket, id);
-		//buttonsPane = new ButtonsPane(socket, id, f);
-		
 		usersPane.setPreferredSize(new Dimension(1000, 70));
 		todoPane.setPreferredSize(new Dimension(300, 300));
-		//buttonsPane.setPreferredSize(new Dimension(300, 200));
 
 		temp = new JPanel();
 		temp.setLayout(new BoxLayout(temp, BoxLayout.Y_AXIS));
 		temp.add(todoPane);
 		temp.add(weatherPane);
-		//temp.add(buttonsPane);
+		
 		getContentPane().add(usersPane, BorderLayout.PAGE_START);
 		getContentPane().add(calendarPane, BorderLayout.CENTER);
-		//getContentPane().add(temp, BorderLayout.EAST);
+		
+		buttonsPane = new ButtonsPane(socket, id, f);
+		buttonsPane.setPreferredSize(new Dimension(300, 200));
+		temp.add(buttonsPane);
+		getContentPane().add(temp, BorderLayout.EAST);
 	}
-	
+	//UI들을 Controller와 연결하
 	private void setupControllers() {
 		calendarController = new CalendarController(calendarPane, todoPane, this.id);
-		//buttonsPane.setCalendarController(calendarController);
+		buttonsPane.setCalendarController(calendarController);
 		calendarPane.setController(calendarController);
 	}
 	
@@ -111,7 +102,6 @@ class SchedulerFrame extends JFrame {
 class SchedulerThread extends Thread{
 
     Socket socket;
-
     UsersPane usersPane;
     String id;
     SchedulerFrame f;
@@ -140,17 +130,19 @@ class SchedulerThread extends Thread{
 				String type = fromServer.readLine();
 				String result = fromServer.readLine();
 				if (type != null) {
+					//번개 미팅이 들어올 경우
 	    			if (type.contains("lightning")) {
-	    				System.out.println("received text : " +result);
 	    				String strArray[] = type.split("@");
 	    				String sendID = strArray[1];
 	    				
+	    				//받아온 JSON파일을 일정으로 변환후 추가하기!
 	    				ScheduleModel receivedSchedule = gson.fromJson(result, ScheduleModel.class);
 	    				controller.addNewScheudle(receivedSchedule);
 	    				if(!sendID.equals(id)) {
-	    				alert = new AlertFrame(sendID, receivedSchedule.title);
+	    					alert = new AlertFrame(sendID, receivedSchedule.title);
 	    				}
 	    			}
+	    			//새로운 유저가 접속한 경우
 	    			else if (type.equals("user")) {
 	    				System.out.println("user changed");
 	    				usersPane.removeAll();
@@ -158,10 +150,10 @@ class SchedulerThread extends Thread{
 	    				usersPane.revalidate();
 	    				usersPane.repaint();
 	    			}
+	    			//새로운 채팅이 들어올 경우
 	    			else if (type.equals("chat")) {
 	    				if(chatframe != null) {
 	    					chatframe.txtArea.append(result+"\n");
-	    					
 	    				}
 	    			}
 				}

@@ -28,12 +28,9 @@ public class CalendarController {
 		System.out.println("size : " + this.schedules.size());
 	}
 	
-	
-	//占쌍삼옙占� 占쏙옙占썰리占쏙옙 占쏙옙占쏙옙퓸占쏙옙獵占� json 占쏙옙占싹듸옙占쏙옙 占싻억옙暠占� 
-	//占쏙옙占쏙옙寗占� 占쌍댐옙 占쌘뱄옙 占쏙옙체占쏙옙 占쏙옙환占쏙옙占쏙옙占쌔댐옙
+	//user ID에 해당하는 폴더에 접근을 해서 JSON파일들을 불러온다
 	private void readFiles() {
 		File directory = new File(id);
-		// Creating the directory
 		boolean bool = directory.mkdirs();
 		if (bool) {
 			// 처음으로 로그인하는것! (폴더를 생성시킴) -> 비어있는 schedules를 만든다
@@ -52,7 +49,7 @@ public class CalendarController {
 			    	if (i > 0) {
 			    	    extension = file.getName().substring(i+1);
 			    	}
-			    	if (extension.equals("json")) {// 占쏙옙占쏙옙占쏙옙 2021占쏙옙 占쏙옙占쏙옙占싹는것몌옙 占쏙옙화占싼댐옙
+			    	if (extension.equals("json")) {//확장자가 json인경우에만 파싱을 할것이다
 						try {
 							fileReader = new FileReader(file.getAbsolutePath());
 						    JsonReader reader = new JsonReader(fileReader);
@@ -71,13 +68,13 @@ public class CalendarController {
 	public void addNewScheudle(ScheduleModel schedule) {
 		try {
 			writeNewSchedule(schedule);
-			refresh();
+			refresh(); //화면 다시그리기 !
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
     }
 	
+	//화면을 다시 그리기위해서는 dirty ui를 모두 지운후 다시 새롭게 ui를 configure해야한다.
 	public void refresh() {
 		todoPane.removeButtons();
 		calendarPane.removeButtons();
@@ -91,15 +88,15 @@ public class CalendarController {
 		calendarPane.repaint();
 	}
 	
+	//ScheduleModel객체를 JSON 형태로 변환후 파일로 저장한다
 	private void writeNewSchedule(ScheduleModel schedule) throws IOException {
 		String json = gson.toJson(schedule);
 		ScheduleModel test = gson.fromJson(json, ScheduleModel.class);
-		//자신의 폴더에 저장해야한다!
-	    Files.write(Paths.get(id,schedule.id + ".json"), json.getBytes());
-	}
+	    Files.write(Paths.get(id,schedule.id + ".json"), json.getBytes());//자신의 폴더에 저장해야한다!
+	}		
 
 	private void configureTodo() {
-		//TODO:占쏙옙占싸울옙 占쏙옙占쏙옙占쏙옙 占쌩곤옙占쌀띰옙占쏙옙 refresh占쌔억옙!
+		//현재 Date이후에 초대 5개의 일정만뽑아내야한다
 		Date now = new Date();
 		ArrayList<ScheduleModel> impendingSchedules = (ArrayList<ScheduleModel>) schedules.clone();
 		Collections.sort(impendingSchedules, new Comparator<ScheduleModel>() {
